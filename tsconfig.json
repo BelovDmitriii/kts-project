@@ -18,8 +18,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "baseUrl": "src",
+    "baseUrl": "srcp",
     "paths": {
+      "pages": ["pages/*"],
       "components": ["components/*"],
       "config": ["config/*"],
       "styles": ["styles/*"],

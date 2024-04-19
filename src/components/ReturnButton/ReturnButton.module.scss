@@ -1,0 +1,11 @@
+.return_container {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  width: 129px;
+  height: 48px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

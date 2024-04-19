@@ -1,0 +1,23 @@
+:root {
+  --icon-color-primary: #000;
+  --icon-color-secondary: #afadb5;
+  --icon-color-accent: #518581;
+}
+
+.primary {
+  stroke: var(--icon-color-primary);
+}
+.secondary {
+  stroke: var(--icon-color-secondary);
+}
+.accent {
+  stroke: var(--icon-color-accent);
+}
+.disabled {
+  stroke: var(--input-text-disabled);
+}
+
+.test{
+  display: flex;
+  align-items:center;
+}

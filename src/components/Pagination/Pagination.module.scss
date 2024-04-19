@@ -1,0 +1,27 @@
+.pagination_container {
+  display: flex;
+  align-items:center;
+  justify-content: space-between;
+  width: 296px;
+  height: 42px;
+  text-align: center;
+  background-color: none;
+  margin: 48px auto 0;
+}
+
+.page_numbers{
+  display: flex;
+  &_item {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #151411;
+    width: 38px;
+    height: 42px;
+  }
+  &_item:hover {
+    background-color: var(--loader-bg);
+    color: var(--button-primary-text);
+    cursor: pointer;
+  }
+}

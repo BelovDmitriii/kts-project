@@ -1,0 +1,51 @@
+.currentcard_wrapper{
+  margin-top: 32px;
+}
+
+.currentcard_container {
+  display: flex;
+  width: 100%;
+  gap: 48px;
+}
+
+.currentcard_header{
+  min-width: 600px;
+  height: 600px;
+  overflow: hidden;
+}
+
+.currentcard_image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.currentcard_content {
+  margin: 0;
+  padding: 0;
+}
+
+.currentcard_caption {
+  line-height: 129%;
+}
+
+.currentcard_title {
+  margin-top: 0;
+}
+
+.currentcard_description {
+  margin-top: 24px;
+  line-height: 125%;
+}
+
+.currentcard_footer {
+  margin-top: 80px;
+}
+
+.currentcard_actions{
+  margin-top: 48px;
+  width: 338px;
+  display: flex;
+  justify-content: space-between;
+}
