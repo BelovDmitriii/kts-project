@@ -1,17 +1,34 @@
 import * as React from 'react';
 import styles from './Icon.module.scss';
+import classNames from 'classnames';
 
 export type IconProps = React.SVGAttributes<SVGElement> & {
     className?: string;
     color?: 'primary' | 'secondary' | 'accent' | 'disabled';
 };
 
-const Icon: React.FC<React.PropsWithChildren<IconProps>> = ({children, className, color}) => {
+const Icon: React.FC<React.PropsWithChildren<IconProps>> = ({
+  children,
+  className,
+  color,
+  width = 24,
+  height = 24,
+  ...props
+}) => {
 
   return (
-    <div className={`${className ? styles[className] : ''}`} color={color}>
+    <svg
+      className={classNames(styles.icon, className, (color && styles[`icon_color_${color}`]))}
+      xmlns='http://www.w3.org/2000/svg'
+      width={width}
+      height={height}
+      preserveAspectRatio='xMidYMid meet'
+      fill='none'
+      {...props}
+    >
       {children}
-    </div>
+      </svg>
+
   );
 }
 

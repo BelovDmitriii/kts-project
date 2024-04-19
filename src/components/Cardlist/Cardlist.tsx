@@ -1,67 +1,55 @@
-import Text from '../Text';
 import Card from '../Card/Card';
 import Button from '../Button';
 import styles from './Cardlist.module.scss';
+import { Link } from 'react-router-dom';
+import { ProductType } from '../../types/types';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { BASE_URL } from '../../utils/consts';
+import CardlistTitle from './CardlistTitle/CardlistTitle';
 
-const Cardlist = () => {
+type CardlistProps = {
+  amount: number;
+  title: string;
+}
+
+const Cardlist: React.FC<CardlistProps> = ({amount, title}) => {
+
+  const [products, setProducts] = useState<ProductType[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/products`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Ошибка при загрузке данных: ', error);
+      }
+    };
+
+    fetchData();
+  },[]);
+
+  const productsList = products.slice(0, amount) || [];
+
   return (
     <>
-      <section className={styles.cardlist_wrapper}>
-        <Text
-          view='p-32'
-          weight='bold'
-          children='Total Product'
-          color='primary'
-        />
-        <Text
-          view='p-20'
-          weight='bold'
-          children='184'
-          color='accent'
-        />
-      </section>
+      <CardlistTitle products={products} textContent={title} />
       <section className={styles.cardlist_items}>
-          <Card
-            image="https://pixy.org/src2/597/5974275.jpg"
-            contentSlot='300 рублей'
-            actionSlot={<Button children='Add to Cart'/>}
-            title="Рассказ о белочке"
-            subtitle="Жила в старом лесу белка. У белки весной появилась дочка белочка.
-            Один раз белка с белочкой собирали грибы на зиму. Вдруг на соседней ёлке появилась куница. Она приготовилась схватить белочку. Мама – белка прыгнула навстречу кунице и крикнула дочке: «Беги!»
-            Белочка бросилась наутёк. Наконец она остановилась. Посмотрела по сторонам, а места незнакомые! Мамы – белки нет. Что делать?
-            Увидела белочка дупло на сосне, спряталась и заснула. А утром мама дочку нашла."
-          />
-          <Card
-            image="https://pixy.org/src2/597/5974275.jpg"
-            contentSlot='300 рублей'
-            actionSlot={<Button children='Add to Cart'/>}
-            title="Рассказ о белочке"
-            subtitle="Жила в старом лесу белка. У белки весной появилась дочка белочка.
-            Один раз белка с белочкой собирали грибы на зиму. Вдруг на соседней ёлке появилась куница. Она приготовилась схватить белочку. Мама – белка прыгнула навстречу кунице и крикнула дочке: «Беги!»
-            Белочка бросилась наутёк. Наконец она остановилась. Посмотрела по сторонам, а места незнакомые! Мамы – белки нет. Что делать?
-            Увидела белочка дупло на сосне, спряталась и заснула. А утром мама дочку нашла."
-          />
-          <Card
-            image="https://pixy.org/src2/597/5974275.jpg"
-            contentSlot='300 рублей'
-            actionSlot={<Button children='Add to Cart'/>}
-            title="Рассказ о белочке"
-            subtitle="Жила в старом лесу белка. У белки весной появилась дочка белочка.
-            Один раз белка с белочкой собирали грибы на зиму. Вдруг на соседней ёлке появилась куница. Она приготовилась схватить белочку. Мама – белка прыгнула навстречу кунице и крикнула дочке: «Беги!»
-            Белочка бросилась наутёк. Наконец она остановилась. Посмотрела по сторонам, а места незнакомые! Мамы – белки нет. Что делать?
-            Увидела белочка дупло на сосне, спряталась и заснула. А утром мама дочку нашла."
-          />
-          <Card
-            image="https://pixy.org/src2/597/5974275.jpg"
-            contentSlot='300 рублей'
-            actionSlot={<Button children='Add to Cart'/>}
-            title="Рассказ о белочке"
-            subtitle="Жила в старом лесу белка. У белки весной появилась дочка белочка.
-            Один раз белка с белочкой собирали грибы на зиму. Вдруг на соседней ёлке появилась куница. Она приготовилась схватить белочку. Мама – белка прыгнула навстречу кунице и крикнула дочке: «Беги!»
-            Белочка бросилась наутёк. Наконец она остановилась. Посмотрела по сторонам, а места незнакомые! Мамы – белки нет. Что делать?
-            Увидела белочка дупло на сосне, спряталась и заснула. А утром мама дочку нашла."
-          />
-        </section>
+        {productsList.map((product: ProductType) => (
+          <Link key={product.id} to={`/${product.id}`} className={styles.cardlist_item}>
+            <Card
+              key={product.id}
+              image={product.images[0]}
+              contentSlot={`$ ${product.price}`}
+              actionSlot={<Button children='Add to Cart'/>}
+              title={product.title}
+              subtitle={product.description}
+              captionSlot={product.category.name}
+            />
+          </Link>
+        ))}
+      </section>
     </>
   )
 }

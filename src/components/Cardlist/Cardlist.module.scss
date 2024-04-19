@@ -9,6 +9,18 @@
   display: flex;
   flex-wrap: wrap;
   row-gap: 79px;
-  column-gap: 30px;
+  justify-content: space-between;
   margin-top: 32px;
+}
+
+.cardlist_item{
+  text-decoration: none;
+  color: inherit;
+}
+
+.loader_container{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }

@@ -58,6 +58,7 @@
 .card_container {
   background: var(--button-primary-text);
   width: 380px;
+  height: 618px;
   padding: var(--space-none) var(--space-none) var(--space-xl);
 }
 
@@ -71,8 +72,8 @@
 .card_image {
   display: block;
   background: var(--card-image-bg);
-  width: 380px;
-  height: auto;
+  width: 100%;
+  height: 360px;
 }
 
 .card_content {

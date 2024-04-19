@@ -5,13 +5,13 @@ import './App.modules.scss';
 import Header from '../Header';
 
 function App() {
+
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<MainPage />} >
-        </Route>
-        <Route path='/elem' element={<ProductPage />}/>
+        <Route path="/" element={<MainPage />} />
+        <Route path='/:id' element={<ProductPage />}/>
       </Routes>
     </BrowserRouter>
   )

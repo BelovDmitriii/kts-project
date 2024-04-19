@@ -1,23 +1,19 @@
-:root {
-  --icon-color-primary: #000;
-  --icon-color-secondary: #afadb5;
-  --icon-color-accent: #518581;
-}
+@import 'styles/variables.scss';
 
-.primary {
-  stroke: var(--icon-color-primary);
-}
-.secondary {
-  stroke: var(--icon-color-secondary);
-}
-.accent {
-  stroke: var(--icon-color-accent);
-}
-.disabled {
-  stroke: var(--input-text-disabled);
-}
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  color: currentColor;
 
-.test{
-  display: flex;
-  align-items:center;
+  &_color_primary {
+    color: var(--color-black);
+  }
+
+  &_color_secondary {
+    color: var(--color-blue-grey);
+  }
+
+  &_color_accent {
+    color: var(--color-accent);
+  }
 }

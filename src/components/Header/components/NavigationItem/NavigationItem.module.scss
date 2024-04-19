@@ -3,6 +3,9 @@
   align-items: center;
   width: 351px;
   justify-content: space-between;
+  &_link {
+    text-decoration: none;
+  }
 }
 
 .navigation_item{

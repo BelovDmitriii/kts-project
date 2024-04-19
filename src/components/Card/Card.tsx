@@ -22,9 +22,13 @@ const Card: React.FC<CardProps> = ({className, image, captionSlot, title, subtit
 
   return (
     <div className={classNames(styles.card_container, className)} onClick={onClick}>
-        <img className={styles.card_image} src={image} alt="картиночка" />
+        <img className={styles.card_image} src={image} alt="Product" />
       <div className={styles.card_content}>
-        {captionSlot && <div className={styles.card_caption}>{captionSlot}</div>}
+        {captionSlot && (
+          <div className={styles.card_caption}>
+            {captionSlot}
+          </div>)
+        }
         <div className={styles.card_title}>
           <Text view="p-20" maxLines={2}>{title}</Text>
         </div>
