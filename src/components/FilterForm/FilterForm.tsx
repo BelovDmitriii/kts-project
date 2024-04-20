@@ -1,15 +1,20 @@
-import Input from '../Input';
-import ArrowDownIcon from '../icons/ArrowDownIcon';
+import MultiDropdown from '../MultiDropdown';
 import styles from './FilterForm.module.scss';
+import { Option } from '../MultiDropdown';
 
 const FilterForm = () => {
   return (
     <section className={styles.filter_container}>
-      <Input
-      value='Filter'
-      onChange={(value: string) => console.log(value)}
-      afterSlot={<ArrowDownIcon className='test'/>}
-    />
+      <MultiDropdown
+        options={[
+          { key: 'first', value: 'First Filter' },
+          { key: 'second', value: 'Second Filter' },
+          { key: 'third', value: 'Third Filter' }
+        ]}
+        value={[{ key: 'first', value: 'First Filter' }]}
+        onChange={(value: Option[]) => console.log('Выбрано:', value)}
+        getTitle={() => ''}
+      />
     </section>
   )
 }

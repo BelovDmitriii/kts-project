@@ -1,0 +1,33 @@
+.multi_dropdown {
+  position: relative;
+  width: 100%;
+
+  &_options {
+    position: absolute;
+    top: calc(100% + var(--space-xxs));
+    left: 0;
+    width: 100%;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow);
+  }
+
+  &_option {
+    display: block;
+    padding: var(--space-s) var(--space-xs);
+    color: var(--color-black);
+    transition: color 0.3s ease;
+    cursor: pointer;
+    appearance:none;
+    border: none;
+    outline: none;
+    background: none;
+
+    &:hover {
+      color: var(--color-blue-grey);
+    }
+
+    &_selected {
+      color: var(--color-accent);
+    }
+  }
+}

@@ -3,8 +3,5 @@
   align-items: center;
   width: 134px;
   height: 42px;
-
-  &_name {
-    margin-left: 12px;
-  }
+  gap: var(--space-xs);
 }

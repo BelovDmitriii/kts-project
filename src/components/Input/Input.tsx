@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Input.module.scss';
+import classNames from 'classnames';
 
 export type InputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -15,24 +16,27 @@ export type InputProps = Omit<
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const{ value, onChange, afterSlot, className, ...rest} = props;
+  const{ value, onChange, afterSlot, className, disabled, ...rest} = props;
 
-  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(evt.target.value);
-  };
+  const handleChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>): void => {
+      onChange(event.target.value);
+    }, [onChange]
+  );
 
     return (
-      <div className={`${styles.input_container} ${className ? styles[className] : ''}`}>
+      <label className={classNames(styles.input, className && styles[className], disabled && 'input_disabled')}>
         <input
+          className={styles.input_field}
           type="text"
           value={value}
           onChange={handleChange}
-          className={styles.input_field}
+          disabled={disabled}
           ref={ref}
           {...rest}
         />
-        {afterSlot && <div className={styles.input_icon}>{afterSlot}</div>}
-      </div>
+        {afterSlot && <div className={styles.input_after}>{afterSlot}</div>}
+      </label>
   );
 });
 

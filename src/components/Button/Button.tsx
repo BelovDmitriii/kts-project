@@ -9,15 +9,14 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string;
 };
 
-const Button: React.FC<ButtonProps> = ({children, loading, className, ...rest}) => {
+const Button: React.FC<ButtonProps> = ({ className, children, loading, disabled=false, ...props}) => {
   return(
     <button
-      className={classNames(className && styles[className], styles.button, {[styles.button_loading]: loading} )}
-      onClick={() => console.log('Письмо отправлено')}
-      disabled={loading}
-      {...rest}
+      className={classNames( styles.button, className && styles[className], disabled && styles.button_disabled )}
+      disabled={disabled || loading}
+      {...props}
     >
-      {loading && <Loader size='s' fill='var(--button-primary-text)' className={styles.button_loader}/>}
+      {loading && <Loader className={styles.button__loader} size='s' />}
       <span>{children}</span>
     </button>
   )

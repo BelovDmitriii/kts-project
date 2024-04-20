@@ -1,16 +1,15 @@
 .cardlist_wrapper{
-  margin-top: 48px;
+  margin-top: var(--space-xxxl);
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: var(--space-xl);
 }
 
 .cardlist_items {
   display: flex;
   flex-wrap: wrap;
-  row-gap: 79px;
   justify-content: space-between;
-  margin-top: 32px;
+  margin-top: var(--space-xxl);
 }
 
 .cardlist_item{

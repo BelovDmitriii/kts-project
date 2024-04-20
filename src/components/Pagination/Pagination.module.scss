@@ -6,7 +6,7 @@
   height: 42px;
   text-align: center;
   background-color: none;
-  margin: 48px auto 0;
+  margin: var(--space-xxxl) auto 0;
 }
 
 .page_numbers{
@@ -20,8 +20,8 @@
     height: 42px;
   }
   &_item:hover {
-    background-color: var(--loader-bg);
-    color: var(--button-primary-text);
+    background-color: var(--color-accent);
+    color: var(--color-white);
     cursor: pointer;
   }
 }

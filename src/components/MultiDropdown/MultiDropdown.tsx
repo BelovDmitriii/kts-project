@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
-import './MultiDropdown.css';
+import React from 'react';
 import Input from '../Input';
+import Text from '../Text';
 import ArrowDownIcon from '../icons/ArrowDownIcon';
+import classNames from 'classnames';
+import styles from './MultiDropdown.module.scss';
 
 export type Option = {
   /** Ключ варианта, используется для отправки на бек/использования в коде */
@@ -25,101 +27,99 @@ export type MultiDropdownProps = {
   getTitle: (value: Option[]) => string;
 };
 
-const MultiDropdown: React.FC<MultiDropdownProps> = ({className, options, value, onChange, disabled=false, getTitle}) => {
+const MultiDropdown: React.FC<MultiDropdownProps> = ({className, options, value, onChange, disabled, getTitle}) => {
 
-  const[inputText, setInputText] = React.useState('');
-  const[isOpen, setIsOpen] = React.useState(false);
-  const dropDown = React.useRef<HTMLDivElement>(null);
-  const inputElement = React.useRef<HTMLInputElement>(null);
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLInputElement>(null);
+  const [filter, setFilter] = React.useState('');
+  const [isOpened, setIsOpened] = React.useState(false);
 
-  useEffect(() => {
-    console.log('setInputText 1', getTitle(value));
-    if (!isOpen && value.length > 0) setInputText(getTitle(value));
-  }, [value, getTitle,isOpen])
+  const open = () => {
+    setIsOpened(true);
+  };
 
   React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if(isOpen && dropDown.current && !dropDown.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setInputText(getTitle(value));
+    const handleClick = (e: MouseEvent) => {
+      if (!wrapperRef.current?.contains(e.target as HTMLElement)) {
+        setIsOpened(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('click', handleClick);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-  },[isOpen, value, getTitle]);
+      window.removeEventListener('click', handleClick);
+    };
+  }, []);
 
   React.useEffect(() => {
-    if (disabled) {
-      setIsOpen(false);
+    if (isOpened) {
+      setFilter('');
     }
-  }, [disabled]);
+  },[isOpened]);
 
-  const handleInputChange = (inputValue: string) => {
+  const title = React.useMemo(() => getTitle(value), [getTitle, value]);
 
-    const regex = new RegExp(getTitle(value));
+  const isEmpty = value.length === 0;
 
-    setInputText(inputValue.replace(regex, ''))
-  };
+  const filteredOptions = React.useMemo(() => {
+    const str = filter.toLocaleLowerCase();
 
-  const openDropdown = () => {
-    if(!disabled && !isOpen) {
-      setInputText('');
-      setIsOpen(true);
+    return options.filter(
+      (o) => o.value.toLocaleLowerCase().indexOf(str) === 0
+    );
+  }, [filter, options]);
+
+  const selectedKeysSet = React.useMemo<Set<Option['key']>>(
+    () => new Set(value.map(({ key }) => key)),
+    [value]
+  );
+
+  const onSelect = React.useCallback((option: Option) => {
+    if(disabled) {
+      return;
     }
-  }
-
-  const handleOptionClick = (option: Option) => {
-
-    const index = value.findIndex(item => item.key === option.key);
-    if(index === -1){
-      onChange([...value, option]);
+    if (selectedKeysSet.has(option.key)) {
+      onChange([...value].filter(({ key }) => key !== option.key));
     } else {
-      const updatedValue = [...value];
-      updatedValue.splice(index, 1);
-      onChange(updatedValue);
+      onChange([...value, option]);
     }
-    inputElement.current && inputElement.current.focus()
-  };
 
-  const filteredOptions = options.filter(option => option.value.toLowerCase().includes(inputText.toLowerCase()));
+    ref.current?.focus();
+  }, [disabled, onChange, value, selectedKeysSet]);
 
-  return(
+  const opened = isOpened && !disabled;
+
+  return (
     <div
-      ref={dropDown}
-      className={`dropdown-container ${className}`}
+      className={classNames(className && styles[className], styles.multi_dropdown)}
+      ref={wrapperRef}
     >
       <Input
-        ref={inputElement}
-        className='dropdown-input'
-        value={inputText}
-        onChange={handleInputChange}
+        className='multi_dropdown_field'
+        onClick={open}
         disabled={disabled}
-        afterSlot={<ArrowDownIcon className="input-icon" color='secondary'/>}
-        placeholder={getTitle(value)}
-        onClick={(event) => {
-          event.preventDefault();
-          openDropdown()
-        }}
-       />
-      {isOpen && (
-        <ul className="dropdown-menu">
-        {filteredOptions.map((option) => (
-          <li
-            className='dropdown-menu-element'
-            key={option.key}
-            style={{ cursor: 'pointer'}}
-            onClick={() => handleOptionClick(option)}
-          >
-            <div className='dropdown-menu-input' style={{ color: value.some(item => item.key === option.key) ? 'var(--loader-bg)': undefined }}>
-              <span className='dropdown-menu-item'>{option.value}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+        placeholder='Filter'
+        value={opened ? filter : isEmpty ? '' : title}
+        onChange={setFilter}
+        afterSlot={<ArrowDownIcon color='secondary' />}
+        ref={ref}
+      />
+      {opened && (
+        <div className={styles.multi_dropdown_options}>
+          {filteredOptions.map((option) => (
+            <button
+              className={classNames(
+                styles.multi_dropdown_option,
+                selectedKeysSet.has(option.key) && styles.multi_dropdown_option_selected
+              )}
+              key={option.key}
+              onClick={() => onSelect(option)}
+            >
+              <Text view='p-16'>{option.value}</Text>
+              </button>
+          ))}
+        </div>
       )}
     </div>
   );

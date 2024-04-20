@@ -1,5 +1,6 @@
 :root {
   --color-white: #fff;
+  --color-off-white: #fafafa;
   --color-black: #000;
   --color-light-grey: #d9d9d9;
   --color-blue-grey: #afadb5;
@@ -9,10 +10,24 @@
 
   --shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
 
+  --space-xxxl: 48px;
+  --space-xxl: 32px;
   --space-xl: 24px;
   --space-l: 20px;
   --space-m: 16px;
   --space-s: 14px;
   --space-xs: 12px;
   --space-xxs: 8px;
+  --space-none: 0px;
+
+  --font-weight-bold: 700;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+
+  --font-size-xl: 44px;
+  --font-size-xlg: 32px;
+  --font-size-lg: 20px;
+  --font-size-md: 18px;
+  --font-size-sm: 16px;
+  --font-size-xsm: 14px;
 }

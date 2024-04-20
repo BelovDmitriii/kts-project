@@ -5,14 +5,16 @@ import Pagination from '../../components/Pagination';
 import SearchForm from '../../components/SearchForm/SearchForm';
 import styles from './MainPage.module.scss';
 
+const PRODUCTS_COUNT = 9;
+
 const MainPage = () => {
-  
+
   return(
     <section className={styles.mainpage_wrapper}>
       <Overview />
       <SearchForm />
       <FilterForm />
-      <Cardlist amount={9} title='Total Product' />
+      <Cardlist amount={PRODUCTS_COUNT} title='Total Product' />
       <Pagination />
     </section>
   );
