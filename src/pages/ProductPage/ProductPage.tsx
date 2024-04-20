@@ -8,6 +8,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../utils/consts';
 import { Link, useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
+import NotFoundPage from '../NotFoundPage';
 
 const ProductPage = () => {
 
@@ -29,14 +30,21 @@ const ProductPage = () => {
       }
     };
     fetchData();
-  }, [id])
+  }, [id]);
 
-  return(
-    isLoading
-    ? <div className={styles.loader_container}>
+  if(isLoading){
+    return (
+      <div className={styles.loader_container}>
         <Loader size='l' fill='accent' />
       </div>
-    : (
+    );
+  }
+
+  if (!product) {
+    return <NotFoundPage type={'page'} />;
+  }
+
+  return(
     product &&
     <section className={styles.productpage_wrapper}>
       <Link to="/" className={styles.productpage_link}>
@@ -50,8 +58,7 @@ const ProductPage = () => {
         subtitle={product.description}/>
       <Cardlist amount={3} title='Related Items'/>
     </section>
-    )
-  );
+  )
 }
 
 export default ProductPage;

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/consts';
 import CardlistTitle from './CardlistTitle/CardlistTitle';
+import NotFoundPage from '../../pages/NotFoundPage';
 
 type CardlistProps = {
   amount: number;
@@ -29,6 +30,10 @@ const Cardlist: React.FC<CardlistProps> = ({amount, title}) => {
 
     fetchData();
   },[]);
+
+  if(!products) {
+    return <NotFoundPage type='page' />
+  }
 
   const productsList = products.slice(0, amount) || [];
 
