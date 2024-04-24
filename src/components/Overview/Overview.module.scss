@@ -1,10 +1,14 @@
-.overview_container {
-  margin: 0 auto;
-  text-align: center;
-  width: 653px;
-  height: fit-content;
-}
+@import 'styles/variables';
 
-.overview_description{
-  margin-top: var(--space-xl);
+.overview {
+  &__container {
+    margin: 0 auto;
+    text-align: center;
+    width: 653px;
+    height: fit-content;
+  }
+
+  &__description{
+    margin-top: $space-xl;
+  }
 }

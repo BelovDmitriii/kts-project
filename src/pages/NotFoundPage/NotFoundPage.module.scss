@@ -1,3 +1,5 @@
+@import 'styles/variables.scss';
+
 .not_found_page {
   display: flex;
   flex-direction: column;
@@ -5,27 +7,27 @@
   padding: 140px;
   align-items: center;
 
-  &_text {
+  &__text {
     display: block;
     margin-bottom: 24px;
     font-size: 3em;
   }
 
-  &_title {
+  &__title {
     font-size: 3em;
   }
 
-  &_footer {
+  &__footer {
     text-align: center;
     font-size: 25px;
     margin-top: 30px;
   }
 
-  &_link {
+  &__link {
     text-decoration: none;
-    color: var(--color-accent);
+    color: $color-accent;
     &:hover {
-      color: var(--color-blue-grey);
+      color: $color-blue-grey;
       transition: color 0.3s ease;
     }
   }

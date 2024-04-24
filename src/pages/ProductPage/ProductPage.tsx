@@ -1,13 +1,13 @@
-import Cardlist from '../../components/Cardlist';
-import CurrentCard from '../../components/CurrentCard';
-import ReturnButton from '../../components/ReturnButton';
-import styles from './ProductPage.module.scss';
-import { ProductType } from '../../types/types';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../../utils/consts';
+import Cardlist from 'components/Cardlist';
+import CurrentCard from 'components/CurrentCard';
+import ReturnButton from 'components/ReturnButton';
+import styles from './ProductPage.module.scss';
+import { ProductType } from 'types/types';
+import { ENDPOINTS } from 'config/endpoints';
 import { Link, useParams } from 'react-router-dom';
-import Loader from '../../components/Loader';
+import Loader from 'components/Loader';
 import NotFoundPage from '../NotFoundPage';
 
 const ProductPage = () => {
@@ -21,7 +21,7 @@ const ProductPage = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try{
-        const response = await axios.get(`${BASE_URL}/products/${id}`);
+        const response = await axios.get(`${ENDPOINTS.products}/${id}`);
         setProduct(response.data);
       } catch (error){
         console.error('Ошибка при загрузке: ', error);
@@ -34,7 +34,7 @@ const ProductPage = () => {
 
   if(isLoading){
     return (
-      <div className={styles.loader_container}>
+      <div className={styles.product_page__loader_container}>
         <Loader size='l' fill='accent' />
       </div>
     );
@@ -45,15 +45,14 @@ const ProductPage = () => {
   }
 
   return(
-    product &&
-    <section className={styles.productpage_wrapper}>
-      <Link to="/" className={styles.productpage_link}>
+    <section className={styles.product_page__wrapper}>
+      <Link to="/" className={styles.product_page__link}>
         <ReturnButton />
       </Link>
       <CurrentCard
         className='currentcard_wrapper'
         image={product.images[0]}
-        contentSlot={`$ ${product.price}`}
+        contentSlot={'$' + product.price}
         title={product.title}
         subtitle={product.description}/>
       <Cardlist amount={3} title='Related Items'/>

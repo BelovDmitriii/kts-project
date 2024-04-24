@@ -10,16 +10,16 @@ type NotFoundPageProps = {
   type: keyof typeof variants;
 }
 
-function NotFoundPage({type}: NotFoundPageProps): JSX.Element {
+const NotFoundPage: React.FC<NotFoundPageProps> = ({ type }) => {
 
   return(
     <section className={styles.not_found_page} >
-      <b className={styles.not_found_page_text} >
+      <b className={styles.not_found_page__text} >
         {`4${variants[type].o}4`}
       </b>
-      <p className={styles.not_found_page_title} style={{}}>{`Ooops! ${variants[type].text}`}</p>
-      <div className={styles.not_found_page_footer} >
-        <Link to='/' className={styles.not_found_page_link}>
+      <p className={styles.not_found_page__title} style={{}}>{`Ooops! ${variants[type].text}`}</p>
+      <div className={styles.not_found_page__footer} >
+        <Link to='/' className={styles.not_found_page__link}>
           Return to main page
         </Link>
       </div>

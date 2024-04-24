@@ -1,13 +1,13 @@
-import Card from '../Card/Card';
-import Button from '../Button';
-import styles from './Cardlist.module.scss';
-import { Link } from 'react-router-dom';
-import { ProductType } from '../../types/types';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../../utils/consts';
+import { Link } from 'react-router-dom';
+import Card from 'components/Card';
+import Button from 'components/Button';
+import { ProductType } from 'types/types';
+import { ENDPOINTS } from 'config/endpoints';
 import CardlistTitle from './CardlistTitle/CardlistTitle';
-import NotFoundPage from '../../pages/NotFoundPage';
+import NotFoundPage from 'pages/NotFoundPage';
+import styles from './Cardlist.module.scss';
 
 type CardlistProps = {
   amount: number;
@@ -21,7 +21,7 @@ const Cardlist: React.FC<CardlistProps> = ({amount, title}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/products`);
+        const response = await axios.get(ENDPOINTS.products);
         setProducts(response.data);
       } catch (error) {
         console.error('Ошибка при загрузке данных: ', error);
@@ -40,13 +40,13 @@ const Cardlist: React.FC<CardlistProps> = ({amount, title}) => {
   return (
     <>
       <CardlistTitle products={products} textContent={title} />
-      <section className={styles.cardlist_items}>
+      <section className={styles.cardlist__items}>
         {productsList.map((product: ProductType) => (
-          <Link key={product.id} to={`/${product.id}`} className={styles.cardlist_item}>
+          <Link key={product.id} to={`/${product.id}`} className={styles.cardlist__item}>
             <Card
               key={product.id}
               image={product.images[0]}
-              contentSlot={`$ ${product.price}`}
+              contentSlot={'$' + product.price}
               actionSlot={<Button children='Add to Cart'/>}
               title={product.title}
               subtitle={product.description}

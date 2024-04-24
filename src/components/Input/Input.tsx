@@ -1,13 +1,13 @@
 import React from 'react';
-import styles from './Input.module.scss';
 import classNames from 'classnames';
+import styles from './Input.module.scss';
 
 export type InputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   'onChange' | 'value'
 > & {
   /** Значение поля */
-  value: string;
+  value?: string;
   /** Callback, вызываемый при вводе данных в поле */
   onChange: (value: string) => void;
   /** Слот для иконки справа */

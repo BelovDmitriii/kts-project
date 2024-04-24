@@ -1,4 +1,6 @@
+@import 'styles/variables';
+
 .filter_container {
-  margin-top: var(--space-xl);
+  margin-top: $space-xl;
   width: 300px;
 }

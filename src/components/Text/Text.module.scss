@@ -1,3 +1,5 @@
+@import 'styles/variables';
+
 .text_clamp {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -9,56 +11,56 @@
 
 .text_view {
   &_title {
-    font-size: var(--font-size-xl);
+    font-size: $font-size-xl;
   }
 
   &_button {
-    font-size: var(--font-size-md);
+    font-size: $font-size-md;
   }
 
   &_p-32 {
-    font-size: var(--font-size-xlg);
+    font-size: $font-size-xlg;
   }
 
   &_p-20 {
-    font-size: var(--font-size-lg);
+    font-size: $font-size-lg;
   }
 
   &_p-18 {
-    font-size: var(--font-size-md);
+    font-size: $font-size-md;
   }
 
   &_p-16 {
-    font-size: var(--font-size-sm);
+    font-size: $font-size-sm;
   }
 
   &_p-14 {
-    font-size: var(--font-size-xsm);
+    font-size: $font-size-xsm;
   }
 }
 
 .text_color {
   &_primary {
-    color: var(--color-black);
+    color: $color-black;
   }
 
   &_secondary {
-    color: var(--color-blue-grey);
+    color: $color-blue-grey;
   }
 
   &_accent {
-    color: var(--color-accent);
+    color: $color-accent;
   }
 }
 
 .text_weight {
   &_normal {
-    font-weight: var(--font-weight-normal);
+    font-weight: $font-weight-normal;
   }
   &_medium {
-    font-weight: var(--font-weight-medium);
+    font-weight: $font-weight-medium;
   }
   &_bold {
-    font-weight: var(--font-weight-bold);
+    font-weight: $font-weight-bold;
   }
 }

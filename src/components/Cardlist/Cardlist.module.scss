@@ -1,25 +1,21 @@
-.cardlist_wrapper{
-  margin-top: var(--space-xxxl);
-  display: flex;
-  align-items: center;
-  gap: var(--space-xl);
-}
+@import 'styles/variables';
 
-.cardlist_items {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: var(--space-xxl);
-}
+.cardlist{
+  &__wrapper{
+    margin-top: $space-xxxl;
+    display: flex;
+    align-items: center;
+    gap: $space-xl;
+  }
 
-.cardlist_item{
-  text-decoration: none;
-  color: inherit;
-}
+  &__items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 
-.loader_container{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  &__item{
+    text-decoration: none;
+    color: inherit;
+  }
 }

@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import styles from './Header.module.scss';
 import Cart from './components/Cart';
 import Logo from './components/Logo';
 import NavigationItem from './components/NavigationItem';
 import ProfileIcon from './components/ProfileIcon';
+import styles from './Header.module.scss';
 
 const Header = () => {
   return(

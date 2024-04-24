@@ -1,26 +1,57 @@
-.currentcard_wrapper{
-  margin-top: var(--space-xxl);
-}
+@import 'styles/variables';
 
-.currentcard_container {
-  display: flex;
-  width: 100%;
-  gap: var(--space-xxxl);
-}
+.currentcard{
 
-.currentcard_header{
-  position: relative;
-  min-width: 600px;
-  height: 600px;
-  overflow: hidden;
-}
+  &__container {
+    display: flex;
+    width: 100%;
+    gap: $space-xxxl;
+    margin-top: $space-xxl;
+  }
 
-.currentcard_image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  background-color: var(--color-light-grey);
+  &__header{
+    position: relative;
+    min-width: 600px;
+    height: 600px;
+    overflow: hidden;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: $color-light-grey;
+  }
+
+  &__content {
+    margin: $space-none;
+    padding: $space-none;
+  }
+
+  &__caption {
+    line-height: 129%;
+  }
+
+  &__title {
+    margin-top: $space-none;
+  }
+
+  &__description {
+    margin-top: $space-xl;
+    line-height: 125%;
+  }
+
+  &__footer {
+    margin-top: 80px;
+  }
+
+  &__actions{
+    margin-top: $space-xxxl;
+    width: 338px;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .arrow {
@@ -31,13 +62,15 @@
   border-radius: 50%;
   height: 64px;
   background-color: black;
-  cursor: pointer;
-  &_left{
-    left: var(--space-xl);
+
+  &__left{
+    left: $space-xl;
   }
-  &_right{
-    right: var(--space-xl);
+
+  &__right{
+    right: $space-xl;
   }
+
   svg {
     position: absolute;
     width: 50%;
@@ -52,31 +85,13 @@
   }
 }
 
-.currentcard_content {
-  margin: var(--space-none);
-  padding: var(--space-none);
-}
+.add_to_cart_button {
+  border: 1px solid $color-blue-grey;
+  background-color: $color-off-white;
+  color: $color-black;
+  transition: 0.3s ease;
 
-.currentcard_caption {
-  line-height: 129%;
-}
-
-.currentcard_title {
-  margin-top: var(--space-none);
-}
-
-.currentcard_description {
-  margin-top: var(--space-xl);
-  line-height: 125%;
-}
-
-.currentcard_footer {
-  margin-top: 80px;
-}
-
-.currentcard_actions{
-  margin-top: var(--space-xxxl);
-  width: 338px;
-  display: flex;
-  justify-content: space-between;
+  &:hover {
+    color: $color-white;
+  }
 }

@@ -6,9 +6,9 @@ const SearchForm = () => {
   return (
     <section className={styles.search_form}>
       <Input
-        value='Search product'
+        placeholder='Search product'
         onChange={(value: string) => console.log(value)}
-        afterSlot=<Button children='Find now'/>
+        afterSlot={<Button children='Find now'/>}
       />
     </section>
   )

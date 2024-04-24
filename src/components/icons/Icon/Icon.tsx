@@ -1,10 +1,10 @@
 import * as React from 'react';
-import styles from './Icon.module.scss';
 import classNames from 'classnames';
+import styles from './Icon.module.scss';
 
 export type IconProps = React.SVGAttributes<SVGElement> & {
     className?: string;
-    color?: 'primary' | 'secondary' | 'accent' | 'disabled';
+    color?: 'primary' | 'secondary' | 'accent' | 'white' | 'disabled';
 };
 
 const Icon: React.FC<React.PropsWithChildren<IconProps>> = ({

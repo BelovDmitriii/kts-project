@@ -1,21 +1,24 @@
-.productpage_wrapper {
+@import 'styles/variables.scss';
+
+.product_page {
+
+  &__wrapper{
   width: 100%;
   height: fit-content;
-  background-color: var(--color-off-white);
+  background-color: $color-off-white;
   padding: 60px 100px 146px;
-}
-
-.productpage_link {
-  text-decoration: none;
-  & :hover {
-    color: var(--color-light-grey);
-    transition: 0.3s ease;
   }
-}
 
-.loader_container{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  &__link {
+    display: inline-block;
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  &__loader_container{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
 }

@@ -6,14 +6,18 @@
   color: currentColor;
 
   &_color_primary {
-    color: var(--color-black);
+    color: $color-black;
   }
 
   &_color_secondary {
-    color: var(--color-blue-grey);
+    color: $color-blue-grey;
   }
 
   &_color_accent {
-    color: var(--color-accent);
+    color: $color-accent;
+  }
+
+  &_color_white {
+    color: $color_white;
   }
 }

@@ -1,7 +1,9 @@
+@import 'styles/variables';
+
 .container_logo {
   display: flex;
   align-items: center;
   width: 134px;
   height: 42px;
-  gap: var(--space-xs);
+  gap: $space-xs;
 }

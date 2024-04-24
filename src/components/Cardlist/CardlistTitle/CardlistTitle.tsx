@@ -1,5 +1,5 @@
-import { ProductType } from '../../../types/types';
-import Text from '../../Text';
+import { ProductType } from 'types/types';
+import Text from 'components/Text';
 import styles from '../Cardlist.module.scss';
 
 type CardlistProps = {
@@ -8,15 +8,17 @@ type CardlistProps = {
 }
 
 const CardlistTitle: React.FC<CardlistProps> = ({products, textContent}) => {
+  const isShowText = (textContent === 'Total Product') && products;
+
   return (
-    <section className={styles.cardlist_wrapper}>
+    <section className={styles.cardlist__wrapper}>
       <Text
         view='p-32'
         weight='bold'
         children={textContent}
         color='primary'
       />
-      {(textContent === 'Total Product') && products && <Text
+      {isShowText && <Text
         view='p-20'
         weight='bold'
         children={products.length}
@@ -26,4 +28,4 @@ const CardlistTitle: React.FC<CardlistProps> = ({products, textContent}) => {
   )
 }
 
-export default CardlistTitle
+export default CardlistTitle;

@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './Loader.module.scss';
 import SpinnerIcon from '../icons/SpinnerIcon';
 import classNames from 'classnames';
+import styles from './Loader.module.scss';
 
 export type LoaderProps = {
     size?: 's' | 'm' | 'l';

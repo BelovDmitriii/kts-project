@@ -1,23 +1,23 @@
+@import 'styles/variables.scss';
+
 .button {
-  background-color: var(--color-accent);
+  background-color: $color-accent;
 
   display: inline-flex;
   align-items: center;
-  padding: var(--space-m) var(--space-xxl);
-  color: var(--color-white);
+  padding: $space-m $space-xxl;
+  color: $color-white;
   border: none;
-  font-weight: var(--font-weight-normal);
-  font-size: var(--font-size-md);
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: var(--color-accent-hover);
+    background-color: $color-accent-hover;
     cursor: pointer;
 
   }
 
   &:active {
-    background-color: var(--color-accent-active);
+    background-color: $color-accent-active;
   }
 
   &:disabled {
@@ -25,22 +25,15 @@
     cursor: default;
   }
 
-  .button__loader {
+  &__loader {
     flex-shrink: 0;
-    margin-right: var(--space-xxs);
+    margin-right: $space-xxs;
     color: currentColor;
   }
 
-  .button_disabled {
-    --bg-color: var(--color-light-grey);
+  &__disabled {
+    background-color: $color-light-grey;
   }
 }
 
-.add_to_cart_button {
-  border: 1px solid var(--color-blue-grey);
-  background-color: var(--color-off-white);
-  color: var(--color-black);
-  &:hover {
-    color: var(--color-white);
-  }
-}
+

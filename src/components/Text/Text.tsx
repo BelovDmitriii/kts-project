@@ -1,8 +1,8 @@
 import * as React from 'react'
-import styles from './Text.module.scss';
 import classNames from 'classnames';
+import styles from './Text.module.scss';
 
-export type TextProps = {
+export type TextProps = React.PropsWithChildren<{
     /** Дополнительный класс */
     className?: string;
     /** Стиль отображения */
@@ -17,11 +17,9 @@ export type TextProps = {
     color?: 'primary' | 'secondary' | 'accent';
     /** Максимальное кол-во строк */
     maxLines?: number;
-};
+}>;
 
 const Text: React.FC<TextProps> = ({className, view='p-14', tag: Tag='p', weight, children, color, maxLines}) => {
-
-  // const classNames = ['text',view, weight, color, className].filter(Boolean).join(' ');
 
   return (
     <Tag className={classNames(

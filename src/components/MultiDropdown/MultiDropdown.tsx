@@ -3,29 +3,8 @@ import Input from '../Input';
 import Text from '../Text';
 import ArrowDownIcon from '../icons/ArrowDownIcon';
 import classNames from 'classnames';
+import { Option, MultiDropdownProps } from './types';
 import styles from './MultiDropdown.module.scss';
-
-export type Option = {
-  /** Ключ варианта, используется для отправки на бек/использования в коде */
-  key: string;
-  /** Значение варианта, отображается пользователю */
-  value: string;
-};
-
-/** Пропсы, которые принимает компонент Dropdown */
-export type MultiDropdownProps = {
-  className?: string;
-  /** Массив возможных вариантов для выбора */
-  options: Option[];
-  /** Текущие выбранные значения поля, может быть пустым */
-  value: Option[];
-  /** Callback, вызываемый при выборе варианта */
-  onChange: (value: Option[]) => void;
-  /** Заблокирован ли дропдаун */
-  disabled?: boolean;
-  /** Возвращает строку которая будет выводится в инпуте. В случае если опции не выбраны, строка должна отображаться как placeholder. */
-  getTitle: (value: Option[]) => string;
-};
 
 const MultiDropdown: React.FC<MultiDropdownProps> = ({className, options, value, onChange, disabled, getTitle}) => {
 
@@ -106,12 +85,12 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({className, options, value,
         ref={ref}
       />
       {opened && (
-        <div className={styles.multi_dropdown_options}>
+        <div className={styles.multi_dropdown__options}>
           {filteredOptions.map((option) => (
             <button
               className={classNames(
-                styles.multi_dropdown_option,
-                selectedKeysSet.has(option.key) && styles.multi_dropdown_option_selected
+                styles.multi_dropdown__option,
+                selectedKeysSet.has(option.key) && styles.multi_dropdown__option__selected
               )}
               key={option.key}
               onClick={() => onSelect(option)}

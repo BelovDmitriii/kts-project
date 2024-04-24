@@ -1,18 +1,17 @@
 import Button from '../Button';
 import Text from '../Text';
-import styles from './CurrentCard.module.scss';
 import classNames from 'classnames';
+import ArrowLeftIcon from 'components/icons/ArrowLeftIcon';
+import ArrowRightIcon from 'components/icons/ArrowRightIcon';
+import styles from './CurrentCard.module.scss';
 
 export type CurrentCardProps = {
   className?: string,
   image: string;
   captionSlot?: React.ReactNode;
   title: React.ReactNode;
-  /** Описание карточки */
   subtitle: React.ReactNode;
-  /** Содержимое карточки (футер/боковая часть), может быть пустым */
   contentSlot?: React.ReactNode;
-  /** Клик на карточку */
   onClick?: React.MouseEventHandler;
 };
 
@@ -21,24 +20,20 @@ const CurrentCard: React.FC<CurrentCardProps> = (props) => {
   const {className, image, captionSlot, title, subtitle, contentSlot, onClick} = props;
 
   return (
-    <div className={classNames(styles.currentcard_container, className && styles[className])} onClick={onClick}>
-      <div className={styles.currentcard_header}>
-        <img className={styles.currentcard_image} src={image} alt="Product" />
-        <div className={`${styles.arrow} ${styles.arrow_left}`}>
-          <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19.043 25.6126L10.9561 17.5258C10.0011 16.5708 10.0011 15.008 10.9561 14.0529L19.043 5.96613" stroke="white" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+    <div className={classNames(styles.currentcard__container, className && styles[className])} onClick={onClick}>
+      <div className={styles.currentcard__header}>
+        <img className={styles.currentcard__image} src={image} alt="Product" />
+        <div className={`${styles.arrow} ${styles.arrow__left}`}>
+          <ArrowLeftIcon width={31} height={31} color='white' />
         </div>
-        <div className={`${styles.arrow} ${styles.arrow_right}`}>
-          <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11.957 25.6126L20.0439 17.5258C20.9989 16.5708 20.9989 15.008 20.0439 14.0529L11.957 5.96613" stroke="white" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+        <div className={`${styles.arrow} ${styles.arrow__right}`}>
+          <ArrowRightIcon width={31} height={31} color='white' />
         </div>
       </div>
-      <div className={styles.currentcard_content}>
+      <div className={styles.currentcard__content}>
         {captionSlot && (
           <Text
-            className={styles.currentcard_caption}
+            className={styles.currentcard__caption}
             view='p-14'
             weight='medium'
             color='secondary'
@@ -46,33 +41,33 @@ const CurrentCard: React.FC<CurrentCardProps> = (props) => {
             {captionSlot}
           </Text>
         )}
-        <div className={styles.currentcard_title}>
-          <Text view="title" maxLines={2}>
+        <div className={styles.currentcard__title}>
+          <Text view="title" weight='bold' maxLines={2}>
             {title}
           </Text>
         </div>
         <Text
-          className={styles.currentcard_description}
+          className={styles.currentcard__description}
           view="p-16"
           maxLines={3}
           color='secondary'
         >
           {subtitle}
         </Text>
-        <div className={styles.currentcard_footer}>
+        <div className={styles.currentcard__footer}>
           {contentSlot && (
             <Text
-              className={styles.currentcard_content_slot}
-              view='p-18'
+              className={styles.currentcard__content_slot}
+              view='title'
               weight='bold'
               color='primary'
             >
               {contentSlot}
             </Text>
             )}
-            <div className={styles.currentcard_actions}>
+            <div className={styles.currentcard__actions}>
               <Button children='Byu Now'/>
-              <Button children='Add to Cart' className='add_to_cart_button' />
+              <Button children='Add to Cart' className={styles.add_to_cart_button} />
             </div>
         </div>
       </div>
