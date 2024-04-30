@@ -1,0 +1,39 @@
+.checkbox-wrapper {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  background-color: var(--button-primary-text);
+  width: 40px;
+  height: 40px;
+}
+
+.checkbox-element {
+  appearance: none;
+	width: 40px;
+	height: 40px;
+	margin: 0;
+}
+
+.checkbox-element:hover {
+  border: 1px solid var(--loader-bg);
+  background-color: var(--button-primary-text);
+  margin: 0;
+}
+
+.checkbox-wrapper:disabled {
+  background-color: var(--checkbox-bg-disabled);
+  margin: 0;
+}
+
+.checkbox-icon {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 40px;
+  height: 40px;
+}
+
+.disabled {
+  background-color: var(--checkbox-bg-disabled);
+  pointer-events: none;
+}

@@ -1,0 +1,97 @@
+@import 'styles/variables';
+
+.currentcard{
+
+  &__container {
+    display: flex;
+    width: 100%;
+    gap: $space-xxxl;
+    margin-top: $space-xxl;
+  }
+
+  &__header{
+    position: relative;
+    min-width: 600px;
+    height: 600px;
+    overflow: hidden;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: $color-light-grey;
+  }
+
+  &__content {
+    margin: $space-none;
+    padding: $space-none;
+  }
+
+  &__caption {
+    line-height: 129%;
+  }
+
+  &__title {
+    margin-top: $space-none;
+  }
+
+  &__description {
+    margin-top: $space-xl;
+    line-height: 125%;
+  }
+
+  &__footer {
+    margin-top: 80px;
+  }
+
+  &__actions{
+    margin-top: $space-xxxl;
+    width: 338px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64px;
+  border-radius: 50%;
+  height: 64px;
+  background-color: black;
+
+  &__left{
+    left: $space-xl;
+  }
+
+  &__right{
+    right: $space-xl;
+  }
+
+  svg {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 25%;
+    left: 25%;
+  }
+
+  &:hover {
+    opacity: 0.5;
+    transition: 0.3s ease;
+  }
+}
+
+.add_to_cart_button {
+  border: 1px solid $color-blue-grey;
+  background-color: $color-off-white;
+  color: $color-black;
+  transition: 0.3s ease;
+
+  &:hover {
+    color: $color-white;
+  }
+}

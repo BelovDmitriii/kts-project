@@ -1,0 +1,21 @@
+@import 'styles/variables';
+
+.cardlist{
+  &__wrapper{
+    margin-top: $space-xxxl;
+    display: flex;
+    align-items: center;
+    gap: $space-xl;
+  }
+
+  &__items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__item{
+    text-decoration: none;
+    color: inherit;
+  }
+}

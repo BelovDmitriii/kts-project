@@ -8,13 +8,20 @@
     "build": "tsc && vite build",
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint \"./src/**/*.{js,jsx,ts,tsx}\" --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "svgr": "svgr"
   },
   "dependencies": {
+    "axios": "^1.6.8",
+    "classnames": "^2.5.1",
+    "node-sass": "^8.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "6"
   },
   "devDependencies": {
+    "@svgr/cli": "^8.1.0",
+    "@svgr/webpack": "^8.1.0",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
@@ -30,6 +37,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "prettier": "^3.2.5",
+    "sass": "^1.75.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"

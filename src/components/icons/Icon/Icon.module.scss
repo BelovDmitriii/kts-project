@@ -1,0 +1,23 @@
+@import 'styles/variables.scss';
+
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  color: currentColor;
+
+  &_color_primary {
+    color: $color-black;
+  }
+
+  &_color_secondary {
+    color: $color-blue-grey;
+  }
+
+  &_color_accent {
+    color: $color-accent;
+  }
+
+  &_color_white {
+    color: $color_white;
+  }
+}

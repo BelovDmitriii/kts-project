@@ -1,0 +1,39 @@
+@import 'styles/variables.scss';
+
+.button {
+  background-color: $color-accent;
+
+  display: inline-flex;
+  align-items: center;
+  padding: $space-m $space-xxl;
+  color: $color-white;
+  border: none;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $color-accent-hover;
+    cursor: pointer;
+
+  }
+
+  &:active {
+    background-color: $color-accent-active;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  &__loader {
+    flex-shrink: 0;
+    margin-right: $space-xxs;
+    color: currentColor;
+  }
+
+  &__disabled {
+    background-color: $color-light-grey;
+  }
+}
+
+
