@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cardlist from 'components/Cardlist';
 import CurrentCard from 'components/CurrentCard';
 import ReturnButton from 'components/ReturnButton';
-import styles from './ProductPage.module.scss';
 import { ProductType } from 'types/types';
 import { ENDPOINTS } from 'config/endpoints';
-import { Link, useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 import NotFoundPage from '../NotFoundPage';
+import priceFormatter from 'utils/priceFormatter';
+import { ROUTES } from 'config/routes';
+import styles from './ProductPage.module.scss';
 
 const ProductPage = () => {
 
@@ -35,7 +37,7 @@ const ProductPage = () => {
   if(isLoading){
     return (
       <div className={styles.product_page__loader_container}>
-        <Loader size='l' fill='accent' />
+        <Loader size="l" fill="accent" />
       </div>
     );
   }
@@ -46,16 +48,16 @@ const ProductPage = () => {
 
   return(
     <section className={styles.product_page__wrapper}>
-      <Link to="/" className={styles.product_page__link}>
+      <Link to={ROUTES.root} className={styles.product_page__link}>
         <ReturnButton />
       </Link>
       <CurrentCard
-        className='currentcard_wrapper'
+        className="currentcard_wrapper"
         image={product.images[0]}
-        contentSlot={'$' + product.price}
+        contentSlot={priceFormatter(product.price)}
         title={product.title}
         subtitle={product.description}/>
-      <Cardlist amount={3} title='Related Items'/>
+      <Cardlist amount={3} title="Related Items"/>
     </section>
   )
 }

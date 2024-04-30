@@ -19,11 +19,11 @@ const Icon: React.FC<React.PropsWithChildren<IconProps>> = ({
   return (
     <svg
       className={classNames(styles.icon, className, (color && styles[`icon_color_${color}`]))}
-      xmlns='http://www.w3.org/2000/svg'
+      xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
-      preserveAspectRatio='xMidYMid meet'
-      fill='none'
+      preserveAspectRatio="xMidYMid meet"
+      fill="none"
       {...props}
     >
       {children}

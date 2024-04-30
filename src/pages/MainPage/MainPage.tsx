@@ -14,7 +14,7 @@ const MainPage = () => {
       <Overview />
       <SearchForm />
       <FilterForm />
-      <Cardlist amount={PRODUCTS_COUNT} title='Total Product' />
+      <Cardlist amount={PRODUCTS_COUNT} title="Total Product" />
       <Pagination />
     </section>
   );

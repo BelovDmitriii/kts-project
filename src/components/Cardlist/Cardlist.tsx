@@ -7,6 +7,7 @@ import { ProductType } from 'types/types';
 import { ENDPOINTS } from 'config/endpoints';
 import CardlistTitle from './CardlistTitle/CardlistTitle';
 import NotFoundPage from 'pages/NotFoundPage';
+import priceFormatter from 'utils/priceFormatter';
 import styles from './Cardlist.module.scss';
 
 type CardlistProps = {
@@ -32,7 +33,7 @@ const Cardlist: React.FC<CardlistProps> = ({amount, title}) => {
   },[]);
 
   if(!products) {
-    return <NotFoundPage type='page' />
+    return <NotFoundPage type="page" />
   }
 
   const productsList = products.slice(0, amount) || [];
@@ -46,8 +47,8 @@ const Cardlist: React.FC<CardlistProps> = ({amount, title}) => {
             <Card
               key={product.id}
               image={product.images[0]}
-              contentSlot={'$' + product.price}
-              actionSlot={<Button children='Add to Cart'/>}
+              contentSlot={priceFormatter(product.price)}
+              actionSlot={<Button>Add to Cart</Button>}
               title={product.title}
               subtitle={product.description}
               captionSlot={product.category.name}

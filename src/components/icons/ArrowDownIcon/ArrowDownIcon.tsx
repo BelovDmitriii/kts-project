@@ -1,4 +1,4 @@
-import withIconWrapper from '../withIconWrapper/withIconWrapper';
+import withIconWrapper from '../withIconWrapper/withIconWrapper.tsx';
 import ArrowDownIconSVG from './ArrowDownIconSVG.tsx';
 
 const ArrowDownIcon = withIconWrapper(ArrowDownIconSVG);

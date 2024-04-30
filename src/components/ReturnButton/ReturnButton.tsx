@@ -6,9 +6,9 @@ const ReturnButton = () => {
   return (
     <div className={styles.return_button__container}>
       <div className={styles.return_button__arrow}>
-        <ArrowLeftIcon width={32} height={32} color='primary'/>
+        <ArrowLeftIcon width={32} height={32} color="primary"/>
       </div>
-        <Text view='p-20' color='primary' tag='span' children='Назад'/>
+        <Text view="p-20" color="primary" tag="span" children="Назад"/>
     </div>
   )
 }

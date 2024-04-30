@@ -75,13 +75,13 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({className, options, value,
       ref={wrapperRef}
     >
       <Input
-        className='multi_dropdown_field'
+        className="multi_dropdown_field"
         onClick={open}
         disabled={disabled}
-        placeholder='Filter'
+        placeholder="Filter"
         value={opened ? filter : isEmpty ? '' : title}
         onChange={setFilter}
-        afterSlot={<ArrowDownIcon color='secondary' />}
+        afterSlot={<ArrowDownIcon color={'secondary'} width={30} height={30} />}
         ref={ref}
       />
       {opened && (
@@ -95,7 +95,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({className, options, value,
               key={option.key}
               onClick={() => onSelect(option)}
             >
-              <Text view='p-16'>{option.value}</Text>
+              <Text view="p-16">{option.value}</Text>
               </button>
           ))}
         </div>

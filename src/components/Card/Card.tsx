@@ -18,7 +18,7 @@ export type CardProps = {
     actionSlot?: React.ReactNode;
 };
 
-const CardCpmponent: React.FC<CardProps> = ({className, image, captionSlot, title, subtitle, contentSlot, onClick, actionSlot}) => {
+const Card: React.FC<CardProps> = ({className, image, captionSlot, title, subtitle, contentSlot, onClick, actionSlot}) => {
 
   return (
     <div className={classNames(styles.card__container, className)} onClick={onClick}>
@@ -26,26 +26,24 @@ const CardCpmponent: React.FC<CardProps> = ({className, image, captionSlot, titl
       <div className={styles.card__content}>
         {captionSlot && (
           <div className={styles.card__caption}>
-            <Text weight='medium' view='p-14'>{captionSlot}</Text>
+            <Text weight="medium" view="p-14">{captionSlot}</Text>
           </div>)
         }
         <div className={styles.card__title}>
-          <Text view="p-20" weight='medium' maxLines={2}>{title}</Text>
+          <Text view="p-20" weight="medium" maxLines={2}>{title}</Text>
         </div>
         <div className={styles.card__description}>
           <Text view="p-16" maxLines={3}>{subtitle}</Text>
         </div>
         <div className={styles.card__footer}>
           {contentSlot && <div className={styles.card__content_slot}>
-            <Text view='p-18'  weight='bold'>{contentSlot}</Text>
+            <Text view="p-18"  weight="bold">{contentSlot}</Text>
           </div>}
-          {actionSlot && <div>{actionSlot}</div>}
+          {actionSlot}
         </div>
       </div>
     </div>
   );
 }
 
-const Card = React.memo(CardCpmponent);
-
-export default Card;
+export default React.memo(Card);

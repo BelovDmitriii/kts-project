@@ -13,16 +13,16 @@ const CardlistTitle: React.FC<CardlistProps> = ({products, textContent}) => {
   return (
     <section className={styles.cardlist__wrapper}>
       <Text
-        view='p-32'
-        weight='bold'
+        view="p-32"
+        weight="bold"
         children={textContent}
-        color='primary'
+        color="primary"
       />
       {isShowText && <Text
-        view='p-20'
-        weight='bold'
+        view="p-20"
+        weight="bold"
         children={products.length}
-        color='accent'
+        color="accent"
       />}
     </section>
   )

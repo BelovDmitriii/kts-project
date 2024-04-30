@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ROUTES } from 'config/routes';
 import styles from './NotFoundPage.module.scss';
 
 const variants = {
@@ -19,7 +20,7 @@ const NotFoundPage: React.FC<NotFoundPageProps> = ({ type }) => {
       </b>
       <p className={styles.not_found_page__title} style={{}}>{`Ooops! ${variants[type].text}`}</p>
       <div className={styles.not_found_page__footer} >
-        <Link to='/' className={styles.not_found_page__link}>
+        <Link to={ROUTES.root} className={styles.not_found_page__link}>
           Return to main page
         </Link>
       </div>

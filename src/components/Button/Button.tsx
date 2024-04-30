@@ -7,7 +7,6 @@ import styles from './Button.module.scss';
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
 React.PropsWithChildren<{
   loading?: boolean;
-  children: React.ReactNode;
   className?: string;
 }>;
 
@@ -18,8 +17,8 @@ const Button: React.FC<ButtonProps> = ({ className, children, loading, disabled=
       disabled={disabled || loading}
       {...props}
     >
-      {loading && <Loader className={styles.button__loader} size='s' />}
-      <Text tag='span' view='button'>{children}</Text>
+      {loading && <Loader className={styles.button__loader} size="s" />}
+      <Text tag="span" view="button">{children}</Text>
     </button>
   )
 }

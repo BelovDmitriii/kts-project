@@ -24,25 +24,25 @@ const CurrentCard: React.FC<CurrentCardProps> = (props) => {
       <div className={styles.currentcard__header}>
         <img className={styles.currentcard__image} src={image} alt="Product" />
         <div className={`${styles.arrow} ${styles.arrow__left}`}>
-          <ArrowLeftIcon width={31} height={31} color='white' />
+          <ArrowLeftIcon width={31} height={31} color="white" />
         </div>
         <div className={`${styles.arrow} ${styles.arrow__right}`}>
-          <ArrowRightIcon width={31} height={31} color='white' />
+          <ArrowRightIcon width={31} height={31} color="white" />
         </div>
       </div>
       <div className={styles.currentcard__content}>
         {captionSlot && (
           <Text
             className={styles.currentcard__caption}
-            view='p-14'
-            weight='medium'
-            color='secondary'
+            view="p-14"
+            weight="medium"
+            color="secondary"
           >
             {captionSlot}
           </Text>
         )}
         <div className={styles.currentcard__title}>
-          <Text view="title" weight='bold' maxLines={2}>
+          <Text view="title" weight="bold" maxLines={2}>
             {title}
           </Text>
         </div>
@@ -50,7 +50,7 @@ const CurrentCard: React.FC<CurrentCardProps> = (props) => {
           className={styles.currentcard__description}
           view="p-16"
           maxLines={3}
-          color='secondary'
+          color="secondary"
         >
           {subtitle}
         </Text>
@@ -58,16 +58,16 @@ const CurrentCard: React.FC<CurrentCardProps> = (props) => {
           {contentSlot && (
             <Text
               className={styles.currentcard__content_slot}
-              view='title'
-              weight='bold'
-              color='primary'
+              view="title"
+              weight="bold"
+              color="primary"
             >
               {contentSlot}
             </Text>
             )}
             <div className={styles.currentcard__actions}>
-              <Button children='Byu Now'/>
-              <Button children='Add to Cart' className={styles.add_to_cart_button} />
+              <Button>Byu Now</Button>
+              <Button className={styles.add_to_cart_button}>Add to Cart</Button>
             </div>
         </div>
       </div>

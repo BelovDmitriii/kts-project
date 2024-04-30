@@ -1,9 +1,8 @@
-const ArrowDownIconSVG: React.FC = () => {
-  return (
-    <svg viewBox='0 0 24 24'>
-      <path fillRule="evenodd" clipRule="evenodd" d="M2.33563 8.74741L3.66436 7.25259L12 14.662L20.3356 7.25259L21.6644 8.74741L12 17.338L2.33563 8.74741Z" fill='currentColor' />
-    </svg>
-  );
-};
+import type { SVGProps } from 'react';
 
-export default ArrowDownIconSVG;
+const SvgArrowDownIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" width="32" height="32" {...props} >
+    <path fill="currentColor" d="m2.336 8.747 1.328-1.494L12 14.662l8.336-7.41 1.328 1.495L12 17.338z" />
+  </svg>
+);
+export default SvgArrowDownIcon;
