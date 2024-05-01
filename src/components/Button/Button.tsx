@@ -11,6 +11,7 @@ React.PropsWithChildren<{
 }>;
 
 const Button: React.FC<ButtonProps> = ({ className, children, loading, disabled=false, ...props}) => {
+
   return(
     <button
       className={classNames( styles.button, disabled && styles.button__disabled, className )}

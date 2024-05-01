@@ -1,40 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { observer } from 'mobx-react-lite';
 import Cardlist from 'components/Cardlist';
 import CurrentCard from 'components/CurrentCard';
 import ReturnButton from 'components/ReturnButton';
-import { ProductType } from 'types/types';
-import { ENDPOINTS } from 'config/endpoints';
 import Loader from 'components/Loader';
-import NotFoundPage from '../NotFoundPage';
+import NotFoundPage from 'pages/NotFoundPage';
 import priceFormatter from 'utils/priceFormatter';
-import { ROUTES } from 'config/routes';
+import productsStore from 'store/ProductsStore';
 import styles from './ProductPage.module.scss';
 
-const ProductPage = () => {
+const ProductPage = observer(() => {
 
-  const [product, setProduct] = useState<ProductType | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { id } = useParams();
+  const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try{
-        const response = await axios.get(`${ENDPOINTS.products}/${id}`);
-        setProduct(response.data);
-      } catch (error){
-        console.error('Ошибка при загрузке: ', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
+    if (parseInt(id ?? '')) productsStore.fetchSingleProduct(id ?? '').then(r => r);
+    return () => {
+      productsStore.clearSingleProduct();
+    }
   }, [id]);
 
-  if(isLoading){
+  if (productsStore.isLoading || !productsStore.selectedProduct) {
     return (
       <div className={styles.product_page__loader_container}>
         <Loader size="l" fill="accent" />
@@ -42,24 +29,24 @@ const ProductPage = () => {
     );
   }
 
-  if (!product) {
+  if (!productsStore.isLoading && !productsStore.selectedProduct) {
     return <NotFoundPage type={'page'} />;
   }
 
   return(
     <section className={styles.product_page__wrapper}>
-      <Link to={ROUTES.root} className={styles.product_page__link}>
+      <Link to="/" className={styles.product_page__link}>
         <ReturnButton />
       </Link>
       <CurrentCard
         className="currentcard_wrapper"
-        image={product.images[0]}
-        contentSlot={priceFormatter(product.price)}
-        title={product.title}
-        subtitle={product.description}/>
-      <Cardlist amount={3} title="Related Items"/>
+        image={productsStore.selectedProduct.images[0]}
+        contentSlot={priceFormatter(productsStore.selectedProduct.price)}
+        title={productsStore.selectedProduct.title}
+        subtitle={productsStore.selectedProduct.description}/>
+      <Cardlist products={productsStore.products} title="Related Items" amount={3}/>
     </section>
   )
-}
+})
 
 export default ProductPage;

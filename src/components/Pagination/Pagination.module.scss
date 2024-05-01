@@ -11,13 +11,13 @@
   margin: $space-xxxl auto 0;
 }
 
-.page-numbers{
+.page_numbers{
   display: flex;
   &__item {
     padding: 10px;
     font-size: 18px;
     font-weight: 500;
-    color: $color-black;
+    color: #151411;
     width: 38px;
     height: 42px;
   }
@@ -25,5 +25,20 @@
     background-color: $color-accent;
     color: $color-white;
     cursor: pointer;
+  }
+}
+
+.active_page {
+  background-color: $color-accent;
+  color: $color-white;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+.arrow_icon{
+  &:hover {
+    color: $color-light-grey;
   }
 }
