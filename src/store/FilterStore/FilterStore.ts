@@ -2,9 +2,16 @@ import axios from 'axios';
 import { action, computed, makeObservable, observable } from 'mobx';
 import { ENDPOINTS } from 'config/endpoints';
 import { Option } from 'components/MultiDropdown';
+import { ILocalStore } from 'utils/useLocalStore';
+import { Meta } from 'utils/meta';
 
+type PrivateFields = "_meta" | "_category";
 
-class FilterStore {
+export default class FilterStore implements ILocalStore {
+
+  private _category: string = '';
+  private _meta: Meta = Meta.initial;
+
   isLoading: boolean = false;
 
   searchText: string = '';
@@ -13,60 +20,51 @@ class FilterStore {
   filterByCategories: Option[] = [];
 
   constructor() {
-    makeObservable(this, {
-      isLoading: observable,
-      searchText: observable,
+    makeObservable<FilterStore, PrivateFields>(this, {
+      _meta: observable,
+      _category: observable,
+      meta: computed,
+      category: computed,
       allCategories: observable,
       filterByCategories: observable,
-      setLoading: action,
-      setSearchText: action,
-      setFilterByCategories: action,
-      setCategories: action,
-      categories: computed,
+      setFilterByCategory: action,
+      setCategory: action,
       fetchCategories: action,
     });
-    this.fetchCategories().then();
   }
 
-  setLoading = (flag: boolean) => {
-    this.isLoading = flag;
+  get meta(): Meta {
+    return this._meta;
   }
 
-  setSearchText = (filter: string) => {
-    this.searchText = filter;
+  get category(): string {
+    return this._category;
   }
 
-  setFilterByCategories = (categories: Option[] = []) => {
-    this.filterByCategories = categories;
+  setFilterByCategory = (category: Option[] = []) => {
+    this.filterByCategories = category;
   }
 
-  setCategories = (categories: Option[] = []) => {
-    this.allCategories = categories;
+  setCategory = (category: Option[] = []) => {
+    this.allCategories = category;
   }
 
-  get categories() {
-    return this.allCategories;
+  destroy(): void {
+    //nothing to do
   }
-
-
 
   async fetchCategories(){
-    this.setLoading(true);
+    this._meta = Meta.loading;
     try {
       const response = await axios.get(ENDPOINTS.categories);
-      const categories = response.data.map((category: { id: number, name: string }) => ({
+      const category = response.data.map((category: { id: number, name: string }) => ({
         key: category.id,
         value: category.name,
       }));
-      this.setCategories(categories);
+      this.setCategory(category);
     } catch(error) {
-      console.error('Ошибка при загрузке данных: Categories', error);
-    } finally {
-      this.setLoading(false);
+      this._meta = Meta.error;
+      this._category = '';
     }
   }
 }
-
-const filterStore = new FilterStore();
-
-export default filterStore;

@@ -9,19 +9,23 @@ import NotFoundPage from 'pages/NotFoundPage';
 import priceFormatter from 'utils/priceFormatter';
 import productsStore from 'store/ProductsStore';
 import styles from './ProductPage.module.scss';
+// import { useLocalStore } from 'utils/useLocalStore';
+import { Meta } from 'utils/meta';
 
-const ProductPage = observer(() => {
+const ProductPage = () => {
+
+  // const productsStore = useLocalStore(() => new ProductsStore());
 
   const { id } = useParams<{ id?: string }>();
+  const selectedProduct = productsStore.selectedProduct;
 
   useEffect(() => {
-    if (parseInt(id ?? '')) productsStore.fetchSingleProduct(id ?? '').then(r => r);
-    return () => {
-      productsStore.clearSingleProduct();
+    if (id) {
+      productsStore.fetchSingleProduct(id);
     }
   }, [id]);
 
-  if (productsStore.isLoading || !productsStore.selectedProduct) {
+  if (productsStore.meta === Meta.loading || !selectedProduct) {
     return (
       <div className={styles.product_page__loader_container}>
         <Loader size="l" fill="accent" />
@@ -29,8 +33,8 @@ const ProductPage = observer(() => {
     );
   }
 
-  if (!productsStore.isLoading && !productsStore.selectedProduct) {
-    return <NotFoundPage type={'page'} />;
+  if (productsStore.meta === Meta.error || !selectedProduct) {
+    return <NotFoundPage type={'product'} />;
   }
 
   return(
@@ -40,13 +44,13 @@ const ProductPage = observer(() => {
       </Link>
       <CurrentCard
         className="currentcard_wrapper"
-        image={productsStore.selectedProduct.images[0]}
-        contentSlot={priceFormatter(productsStore.selectedProduct.price)}
-        title={productsStore.selectedProduct.title}
-        subtitle={productsStore.selectedProduct.description}/>
-      <Cardlist products={productsStore.products} title="Related Items" amount={3}/>
+        image={selectedProduct.images[0]}
+        contentSlot={priceFormatter(selectedProduct.price)}
+        title={selectedProduct.title}
+        subtitle={selectedProduct.description}/>
+      <Cardlist title="Related Items" amount={3}/>
     </section>
   )
-})
+}
 
-export default ProductPage;
+export default observer(ProductPage);

@@ -1,84 +1,64 @@
 import { observer } from 'mobx-react-lite';
+import ReactPaginate from 'react-paginate';
+import productsStore from 'store/ProductsStore';
+import PaginationStore from 'store/PaginationStore';
 import ArrowLeftIcon from 'components/icons/ArrowLeftIcon';
 import ArrowRightIcon from 'components/icons/ArrowRightIcon';
-import productsStore from 'store/ProductsStore';
-import { PRODUCTS_COUNT } from 'store/ProductsStore/ProductsStore';
-import classNames from 'classnames';
 import styles from './Pagination.module.scss';
+import { useEffect } from 'react';
+import { useLocalStore } from 'utils/useLocalStore';
 
-const Pagination: React.FC = observer(() => {
-  const currentPage = productsStore.currentPage;
-  const totalPages = Math.ceil(productsStore.productsCount / PRODUCTS_COUNT);
-  const isFirstPage = currentPage === 1;
+const Pagination = observer(() => {
+
+  const paginationStore = useLocalStore(() => new PaginationStore());
+  const currentPage = paginationStore.currentPage;
+  const pageSize = paginationStore.productsCount;
+  const totalProducts = productsStore.products.length;
+
+  useEffect(() => {
+    productsStore.fetchProducts();
+  },[]);
+
+  const totalPages = Math.ceil(totalProducts / pageSize);
+
+  const handlePageChange = (selectedPage: { selected: number }) => {
+    paginationStore.setCurrentPage(selectedPage.selected + 1);
+  };
+
+  const isFirstPage = currentPage;
   const isLastPage = currentPage === totalPages;
 
-  const pageNumbers: (number | 'left...' | 'right...')[] = [1];
-
-  if (currentPage === 4) {
-    pageNumbers.push('left...');
-  }
-
-  if (currentPage >= 3) {
-    pageNumbers.push(currentPage - 1);
-  }
-
-  if (currentPage !== 1) {
-    pageNumbers.push(currentPage);
-  }
-
-  if (totalPages - currentPage > 1) {
-    pageNumbers.push(currentPage + 1);
-  }
-
-  if (totalPages - currentPage > 2) {
-    pageNumbers.push('right...');
-    pageNumbers.push(totalPages);
-  }
-
-  const handlePageChange = (page: number) => {
-    productsStore.setCurrentPage(page);
-  };
-
-  const handleNextPageChange = () => {
-    productsStore.setNextCurrentPage();
-  };
-
-  const handlePrevPageChange = () => {
-    productsStore.setPrevCurrentPage();
-  };
-
-
   return (
-    <div className={styles.pagination_container}>
-      <ArrowLeftIcon
-        className={styles.arrow_icon}
-        width={32}
-        height={32}
-        color={isFirstPage ? 'secondary' : 'accent'}
-        onClick={isFirstPage ? undefined : handlePrevPageChange}
+      <ReactPaginate
+        breakLabel={'...'}
+        pageCount={totalPages}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={2}
+        onPageChange={handlePageChange}
+        containerClassName={styles.pagination__container}
+        activeClassName={styles.active_page}
+        pageClassName={styles.page_numbers__item}
+        previousClassName={styles.arrow_icon}
+        nextClassName={styles.arrow_icon}
+        disabledClassName={styles.disabled}
+        previousLabel={
+          <ArrowLeftIcon
+            className={styles.arrow_icon}
+            width={32}
+            height={32}
+            color={isFirstPage ? 'secondary' : 'accent'}
+          />
+        }
+        nextLabel={
+          <ArrowRightIcon
+            className={styles.arrow_icon}
+            width={32}
+            height={32}
+            color={isLastPage ? 'secondary' : 'accent'}
+          />
+        }
       />
-      <div className={styles.page_numbers}>
-        {pageNumbers.map((page) => typeof page === 'number' ? (
-          <div
-            key={page}
-            className={classNames(styles.page_numbers__item, (currentPage === page) && styles.active_page)}
-            onClick={() =>  typeof page === 'number' && handlePageChange(page)}
-          >
-            {page}
-          </div>
-        ) : (
-          <div key={page} className={styles.page_numbers__item}>...</div>
-        ))}
-      </div>
-      <ArrowRightIcon
-        className={styles.arrow_icon}
-        width={32}
-        height={32}
-        color={isLastPage ? 'secondary' : 'accent'}
-        onClick={isLastPage ? undefined : handleNextPageChange}
-      />
-    </div>
-  )
+  );
 });
 
 export default Pagination;

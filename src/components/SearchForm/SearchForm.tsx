@@ -1,27 +1,23 @@
-import { useState } from 'react';
-import filterStore from 'store/FilterStore';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import styles from './SearchForm.module.scss';
-
+import SearchStore from 'store/SearchStore';
+import { useLocalStore } from 'utils/useLocalStore';
+import { observer } from 'mobx-react-lite';
 
 const SearchForm: React.FC = () => {
-  const [searchValue, setSearchValue] = useState('');
-
-  const handleSearch = () => {
-    filterStore.setSearchText(searchValue);
-  }
+  const searchStore = useLocalStore(() => new SearchStore());
 
   return (
     <section className={styles.search_form}>
       <Input
         placeholder="Search product"
-        value={searchValue}
-        onChange={(value: string) => setSearchValue(value)}
-        afterSlot={<Button onClick={handleSearch}>Find now</Button>}
+        value={searchStore.searchText}
+        onChange={(value: string) => searchStore.setSearchText(value)}
+        afterSlot={<Button onClick={() => searchStore.handleSearch()}>Find now</Button>}
       />
     </section>
   )
-}
+};
 
-export default SearchForm;
+export default observer(SearchForm);

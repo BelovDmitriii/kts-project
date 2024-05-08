@@ -1,5 +1,5 @@
 import Cardlist from 'components/Cardlist';
-import FilterForm from 'components/FilterForm';
+// import FilterForm from 'components/FilterForm';
 import Overview from 'components/Overview';
 import Pagination from 'components/Pagination';
 import SearchForm from 'components/SearchForm';
@@ -11,7 +11,7 @@ const MainPage = () => {
     <section className={styles.mainpage__wrapper}>
       <Overview />
       <SearchForm />
-      <FilterForm/>
+      {/* <FilterForm/> */}
       <Cardlist title="Total Product" />
       <Pagination/>
     </section>
