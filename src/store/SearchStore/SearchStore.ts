@@ -1,39 +1,30 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { ILocalStore } from 'utils/useLocalStore';
-import productsStore from 'store/ProductsStore';
 
 type PrivateFields = '_searchText';
 
 export default class SearchStore implements ILocalStore {
-  private _searchText: string = '';
+  private _searchText: string;
 
-  constructor() {
+  constructor(searchText: string | null) {
     makeObservable<SearchStore, PrivateFields>(this, {
       _searchText: observable,
       searchText: computed,
-      setSearchText: action,
-      getSearchText: computed,
+      setSearchText: action
     });
+
+    this._searchText = searchText || '';
   }
 
-  get searchText(): string {
+  setSearchText(text: string){
+    this._searchText = text || '';
+  }
+
+  get searchText() {
     return this._searchText;
   }
 
-  setSearchText(text: string) {
-    this._searchText = text;
-  }
-
-  get getSearchText() {
-    return this.searchText;
-  }
-
-  async handleSearch() {
-    this.setSearchText(this.searchText);
-    await productsStore.fetchProducts(this.getSearchText);
-  }
-
   destroy(): void {
-    // пока пусто
+    //
   }
 }

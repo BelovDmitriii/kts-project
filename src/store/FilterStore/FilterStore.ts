@@ -1,70 +1,72 @@
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import axios from 'axios';
-import { action, computed, makeObservable, observable } from 'mobx';
-import { ENDPOINTS } from 'config/endpoints';
 import { Option } from 'components/MultiDropdown';
 import { ILocalStore } from 'utils/useLocalStore';
-import { Meta } from 'utils/meta';
+import MetaStore from 'store/MetaStore';
+import { ENDPOINTS } from 'config/endpoints';
 
-type PrivateFields = "_meta" | "_category";
+type PrivateFields = "_categories" | "_selectedCategoryKey";
+type Category = {
+  id: number;
+  name: string;
+}
 
 export default class FilterStore implements ILocalStore {
 
-  private _category: string = '';
-  private _meta: Meta = Meta.initial;
+  private _categories: Option[] = [];
+  private _selectedCategoryKey: string | null = null;
+  private _metaStore: MetaStore = new MetaStore();
 
-  isLoading: boolean = false;
-
-  searchText: string = '';
-
-  allCategories: Option[] = [];
-  filterByCategories: Option[] = [];
-
-  constructor() {
+  constructor(categoryId: string | null) {
     makeObservable<FilterStore, PrivateFields>(this, {
-      _meta: observable,
-      _category: observable,
-      meta: computed,
-      category: computed,
-      allCategories: observable,
-      filterByCategories: observable,
-      setFilterByCategory: action,
-      setCategory: action,
-      fetchCategories: action,
+      _categories: observable,
+      _selectedCategoryKey: observable,
+      categories: computed,
+      selectedCategory: computed,
+      setSelectedCategory: action,
     });
+
+    this._selectedCategoryKey = categoryId || null;
   }
 
-  get meta(): Meta {
-    return this._meta;
+  get categories(): Option[] {
+    return this._categories;
   }
 
-  get category(): string {
-    return this._category;
+  get selectedCategoryKey(): string | null {
+    return this._selectedCategoryKey;
   }
 
-  setFilterByCategory = (category: Option[] = []) => {
-    this.filterByCategories = category;
+  get selectedCategory(): Option[] {
+    const option = this._categories.find(
+      (category) => category.key === this._selectedCategoryKey
+    );
+    return option ? [option] : [];
   }
 
-  setCategory = (category: Option[] = []) => {
-    this.allCategories = category;
+  setSelectedCategory(categoryKey: string | null): void {
+    this._selectedCategoryKey = categoryKey;
   }
 
   destroy(): void {
-    //nothing to do
   }
 
-  async fetchCategories(){
-    this._meta = Meta.loading;
+  async fetchAllCategories(): Promise<void> {
+    this._metaStore.setLoading();
+    this._categories = [];
+
     try {
-      const response = await axios.get(ENDPOINTS.categories);
-      const category = response.data.map((category: { id: number, name: string }) => ({
-        key: category.id,
-        value: category.name,
-      }));
-      this.setCategory(category);
-    } catch(error) {
-      this._meta = Meta.error;
-      this._category = '';
+      const response = await axios.get<Category[]>(ENDPOINTS.categories);
+      runInAction(() => {
+        this._metaStore.setSuccess();
+        this._categories = response.data.map((category) => ({
+          key: String(category.id),
+          value: category.name,
+        }));
+      })
+    } catch (error) {
+      this._metaStore.setError();
+      this._categories = [];
     }
   }
 }

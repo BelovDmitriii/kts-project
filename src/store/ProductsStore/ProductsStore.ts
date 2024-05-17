@@ -1,95 +1,144 @@
 import axios from 'axios';
-import { ENDPOINTS } from 'config/endpoints';
-import { action, computed, makeObservable, observable, runInAction } from 'mobx';
-import { ProductType } from 'types/types';
+import debounce from 'lodash/debounce';
 import { ILocalStore } from 'utils/useLocalStore';
-import { Meta } from 'utils/meta';
+import SearchStore from 'store/SearchStore';
+import FilterStore from 'store/FilterStore';
+import PaginationStore from 'store/PaginationStore';
+import MetaStore from 'store/MetaStore';
+import { ENDPOINTS } from 'config/endpoints';
+import { action, computed, makeObservable, observable, reaction, runInAction } from 'mobx';
+import { ProductType } from 'types/types';
+import { updateURLQueryParam } from 'utils/helper';
 
-type PrivateFields = "_products" | "_meta" | "_selectedProduct";
+type PrivateFields = "_products" | "_totalProductsCount";
 
-class ProductsStore implements ILocalStore {
+export default class ProductsStore implements ILocalStore {
 
   private _products: ProductType[] = [];
-  private _meta: Meta = Meta.initial;
-  private _selectedProduct: ProductType | null = null;
-  // pageNumber = 1;
-  // pageSize = 3;
+  private _totalProductsCount: number = 0;
+  private _metaStore: MetaStore = new MetaStore();
+  private _searchStore: SearchStore;
+  private _filterStore: FilterStore;
+  private _paginationStore: PaginationStore;
+  private _filterReactionDisposer;
 
-  constructor() {
+  constructor({
+                title,
+                categoryId,
+                limit,
+                page,
+  }: {
+    title?: string,
+    categoryId?: string,
+    limit?: number,
+    page?: number,
+  }) {
     makeObservable<ProductsStore, PrivateFields>(this, {
       _products: observable.ref,
-      _meta: observable,
-      _selectedProduct: observable,
+      _totalProductsCount: observable,
       products: computed,
-      meta: computed,
+      totalProducts: computed,
       fetchProducts: action,
-      fetchSingleProduct: action,
-      clearSingleProduct: action,
-      selectedProduct: computed,
-      // pageSize: observable,
-      // pageNumber: observable
     });
-  }
 
-  get meta(): Meta {
-    return this._meta;
+    this._searchStore = new SearchStore(title || null);
+    this._filterStore = new FilterStore(categoryId || null);
+    this._paginationStore = new PaginationStore(limit, page);
+
+
+    this._filterReactionDisposer = reaction(
+      () => ({
+          search: this._searchStore.searchText,
+          filter: this._filterStore.selectedCategoryKey,
+          page: this._paginationStore.currentPage,
+        }),
+      debounce(({ search, filter, page }) => {
+
+        updateURLQueryParam('title', search || null);
+        updateURLQueryParam('categoryId', filter);
+        updateURLQueryParam('page', page > 1 ? page : null);
+
+        this.fetchProducts();
+        this.fetchTotalProducts();
+      }, 300),
+    );
   }
 
   get products(): ProductType[] {
     return this._products;
   }
 
-  get selectedProduct(): ProductType | null {
-    return this._selectedProduct;
+  get paginationStore(): PaginationStore {
+    return this._paginationStore;
   }
 
-  clearSingleProduct = () => {
-    this._selectedProduct = null;
+  get totalProducts(): number {
+    return this._totalProductsCount;
+  }
+
+  get search(): SearchStore {
+    return this._searchStore;
+  }
+
+  get meta(): MetaStore {
+    return this._metaStore;
+  }
+
+  get filterCategory(): FilterStore {
+    return this._filterStore;
+  }
+
+  getProducts(): ProductType[] {
+    return this._products;
   }
 
   destroy(): void {
-    this.clearSingleProduct();
+    this._filterReactionDisposer();
+    this._searchStore.destroy();
   }
 
-  async fetchProducts( title?: string, categoryId?: string): Promise<void> {
-    // const offset = (pageNumber - 1) * pageSize;
-    this._meta = Meta.loading;
+  async fetchProducts(): Promise<void> {
+    this._metaStore.setLoading();
     this._products = [];
+
+    const title = this._searchStore.searchText || undefined;
+    const categoryId = this._filterStore.selectedCategoryKey || undefined;
+
+    const currentPage = this._paginationStore.currentPage;
+    const productsCount = this._paginationStore.productsCount;
+
+    const offset = (currentPage - 1) * productsCount;
+    const limit = productsCount;
+
+    const params = {
+      title,
+      categoryId,
+      offset,
+      limit,
+    };
+
     try {
-      // let url = `${ENDPOINTS.products}?offset=${offset}&limit=${pageSize}`;
-      let url = `${ENDPOINTS.products}`;
-      if (title) {
-        url += `/?title=${encodeURIComponent(title)}`;
-      }
-      if (categoryId) {
-        url += `&categoryId=${encodeURIComponent(categoryId)}`;
-      }
-      const response = await axios.get(url);
+      const response = await axios.get(ENDPOINTS.products, { params });
       runInAction(() => {
-        this._meta = Meta.success;
+        this._metaStore.setSuccess();
         this._products = response.data;
       })
     } catch (error) {
-      this._meta = Meta.error;
+      this._metaStore.setError();
       this._products = [];
     }
   }
 
-  async fetchSingleProduct(id: string) {
-    this._meta = Meta.loading;
-    try {
-      const response = await axios.get(ENDPOINTS.oneProduct(id));
-      runInAction(() => {
-        this._meta = Meta.success;
-        this._selectedProduct = response.data;
-      })
-    } catch (error) {
-      this._meta = Meta.error;
-      this._selectedProduct = null;
-    }
+  async fetchTotalProducts() {
+    const title = this._searchStore.searchText || undefined;
+    const categoryId = this._filterStore.selectedCategoryKey || undefined;
+
+    const params = {
+      title,
+      categoryId,
+    };
+
+    const response = await axios.get(ENDPOINTS.products, { params });
+    this._totalProductsCount = response.data.length;
   }
 }
-
-const productsStore = new ProductsStore();
-
-export default productsStore;

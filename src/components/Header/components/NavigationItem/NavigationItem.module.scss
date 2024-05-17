@@ -37,4 +37,12 @@
     transform: scaleX(0);
     transition: transform 0.3s ease;
   }
+
+  &.active {
+    color: $color-accent;
+    font-weight: 600;
+    &::after {
+      transform: scaleX(1);
+    }
+  }
 }

@@ -1,31 +1,28 @@
-// FilterForm.tsx
+import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useLocalStore } from 'mobx-react-lite';
-import FilterStore from 'store/FilterStore';
-// import productsStore from 'store/ProductsStore';
+import { ProductsStoreContext } from 'pages/MainPage/ProductsStoreProvider';
 import MultiDropdown, { Option } from 'components/MultiDropdown';
 import styles from './FilterForm.module.scss';
-import React from 'react';
 
-const FilterForm = observer(() => {
-  const filterStore = useLocalStore(() => new FilterStore());
+const FilterForm = () => {
+  const productsStore = React.useContext(ProductsStoreContext);
 
-  React.useEffect(() => {
-    filterStore.fetchCategories();
-  },[filterStore]);
-
-  const handleChange = (values: Option[]) => {
-    filterStore.setFilterByCategory(values)
+  const handleChange = (selectedOptions: Option[]) => {
+    productsStore.filterCategory.setSelectedCategory(selectedOptions?.[0]?.key || null);
   }
 
-  const options = filterStore.setFilterByCategory;
-  const values = filterStore.filterByCategories;
+  React.useEffect(() => {
+    productsStore.filterCategory.fetchAllCategories();
+  },[productsStore.filterCategory]);
+
+  const options = productsStore.filterCategory.categories;
+  const value = productsStore.filterCategory.selectedCategory;
 
   return (
     <section className={styles.filter_container}>
       <MultiDropdown
         options={options}
-        value={values}
+        value={value}
         onChange={handleChange}
         getTitle={(values: Option[]) => {
           if (values.length === 0) {
@@ -36,6 +33,6 @@ const FilterForm = observer(() => {
       />
     </section>
   )
-});
+};
 
-export default FilterForm;
+export default observer(FilterForm);

@@ -1,23 +1,18 @@
+import React from 'react';
 import { observer } from 'mobx-react-lite';
 import ReactPaginate from 'react-paginate';
-import productsStore from 'store/ProductsStore';
-import PaginationStore from 'store/PaginationStore';
+import { ProductsStoreContext } from 'pages/MainPage/ProductsStoreProvider';
 import ArrowLeftIcon from 'components/icons/ArrowLeftIcon';
 import ArrowRightIcon from 'components/icons/ArrowRightIcon';
 import styles from './Pagination.module.scss';
-import { useEffect } from 'react';
-import { useLocalStore } from 'utils/useLocalStore';
 
 const Pagination = observer(() => {
+  const productsStore = React.useContext(ProductsStoreContext);
 
-  const paginationStore = useLocalStore(() => new PaginationStore());
+  const paginationStore = productsStore.paginationStore;
   const currentPage = paginationStore.currentPage;
   const pageSize = paginationStore.productsCount;
-  const totalProducts = productsStore.products.length;
-
-  useEffect(() => {
-    productsStore.fetchProducts();
-  },[]);
+  const totalProducts = productsStore.totalProducts;
 
   const totalPages = Math.ceil(totalProducts / pageSize);
 
@@ -25,7 +20,7 @@ const Pagination = observer(() => {
     paginationStore.setCurrentPage(selectedPage.selected + 1);
   };
 
-  const isFirstPage = currentPage;
+  const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
 
   return (

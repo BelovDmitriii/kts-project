@@ -1,31 +1,30 @@
-import { useEffect } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
+import { useLocalStore } from 'utils/useLocalStore';
+import SingleProductStore from 'store/SingleProductStore';
 import Cardlist from 'components/Cardlist';
 import CurrentCard from 'components/CurrentCard';
 import ReturnButton from 'components/ReturnButton';
 import Loader from 'components/Loader';
 import NotFoundPage from 'pages/NotFoundPage';
 import priceFormatter from 'utils/priceFormatter';
-import productsStore from 'store/ProductsStore';
+import ProductsStoreProvider from '../MainPage/ProductsStoreProvider';
 import styles from './ProductPage.module.scss';
-// import { useLocalStore } from 'utils/useLocalStore';
-import { Meta } from 'utils/meta';
 
 const ProductPage = () => {
 
-  // const productsStore = useLocalStore(() => new ProductsStore());
-
   const { id } = useParams<{ id?: string }>();
-  const selectedProduct = productsStore.selectedProduct;
+  const singleProductStore = useLocalStore(() => new SingleProductStore());
+  const product = singleProductStore.product;
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (id) {
-      productsStore.fetchSingleProduct(id);
+      singleProductStore.fetchProduct(id);
     }
-  }, [id]);
+  }, [id, singleProductStore]);
 
-  if (productsStore.meta === Meta.loading || !selectedProduct) {
+  if (singleProductStore.meta.isLoading || !product) {
     return (
       <div className={styles.product_page__loader_container}>
         <Loader size="l" fill="accent" />
@@ -33,7 +32,7 @@ const ProductPage = () => {
     );
   }
 
-  if (productsStore.meta === Meta.error || !selectedProduct) {
+  if (singleProductStore.meta.isError || !product) {
     return <NotFoundPage type={'product'} />;
   }
 
@@ -44,11 +43,13 @@ const ProductPage = () => {
       </Link>
       <CurrentCard
         className="currentcard_wrapper"
-        image={selectedProduct.images[0]}
-        contentSlot={priceFormatter(selectedProduct.price)}
-        title={selectedProduct.title}
-        subtitle={selectedProduct.description}/>
-      <Cardlist title="Related Items" amount={3}/>
+        images={product.images}
+        contentSlot={priceFormatter(product.price)}
+        title={product.title}
+        subtitle={product.description}/>
+      <ProductsStoreProvider limit={3}>
+        <Cardlist title="Related Items"/>
+      </ProductsStoreProvider>
     </section>
   )
 }
