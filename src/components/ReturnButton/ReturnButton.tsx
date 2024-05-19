@@ -1,3 +1,4 @@
+import React from 'react';
 import ArrowLeftIcon from 'components/icons/ArrowLeftIcon';
 import Text from '../Text';
 import styles from './ReturnButton.module.scss';

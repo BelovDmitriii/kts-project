@@ -1,46 +1,46 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { ProductsStoreContext } from '../../pages/MainPage/ProductsStoreProvider';
 import Card from 'components/Card';
 import Button from 'components/Button';
-import { ProductType } from 'types/types';
-import { ENDPOINTS } from 'config/endpoints';
+import Loader from 'components/Loader';
 import CardlistTitle from './CardlistTitle/CardlistTitle';
 import NotFoundPage from 'pages/NotFoundPage';
+import { ProductType } from 'types/types';
 import priceFormatter from 'utils/priceFormatter';
 import styles from './Cardlist.module.scss';
 
 type CardlistProps = {
-  amount: number;
   title: string;
+  amount?: number;
 }
 
-const Cardlist: React.FC<CardlistProps> = ({amount, title}) => {
+const Cardlist: React.FC<CardlistProps> = ({title}) => {
 
-  const [products, setProducts] = useState<ProductType[]>([]);
+  const productsStore = useContext(ProductsStoreContext);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(ENDPOINTS.products);
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Ошибка при загрузке данных: ', error);
-      }
-    };
+  React.useEffect(() => {
+    productsStore?.fetchProducts && productsStore.fetchProducts();
+    productsStore?.fetchTotalProducts && productsStore.fetchTotalProducts();
+  },[productsStore]);
 
-    fetchData();
-  },[]);
+  if (!productsStore) return null;
 
-  if(!products) {
+  const productsList = productsStore.getProducts();
+
+  if(!productsList) {
     return <NotFoundPage type="page" />
   }
 
-  const productsList = products.slice(0, amount) || [];
-
   return (
     <>
-      <CardlistTitle products={products} textContent={title} />
+      {productsStore.meta.isLoading &&
+      <div className={styles.loader_container}>
+        <Loader size="l" fill="accent" />
+      </div>
+      }
+      <CardlistTitle count={productsStore.totalProducts} textContent={title} />
       <section className={styles.cardlist__items}>
         {productsList.map((product: ProductType) => (
           <Link key={product.id} to={`/${product.id}`} className={styles.cardlist__item}>
@@ -60,4 +60,4 @@ const Cardlist: React.FC<CardlistProps> = ({amount, title}) => {
   )
 }
 
-export default Cardlist;
+export default observer(Cardlist);

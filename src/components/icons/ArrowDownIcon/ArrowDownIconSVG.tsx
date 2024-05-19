@@ -1,3 +1,4 @@
+import React from 'react';
 import type { SVGProps } from 'react';
 
 const SvgArrowDownIcon = (props: SVGProps<SVGSVGElement>) => (

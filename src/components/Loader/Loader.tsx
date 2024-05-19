@@ -12,7 +12,7 @@ export type LoaderProps = {
 const Loader: React.FC<LoaderProps> = ({size = 'l', className, fill}) => {
   return(
     <SpinnerIcon
-      className={classNames(className, styles.loader, styles[`loader_size_${size}`])}
+      className={classNames(styles.loader, styles[`loader_size_${size}`], className)}
       color={fill}
     />
   );
