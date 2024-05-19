@@ -1,3 +1,4 @@
+import React from 'react';
 import ProductsStoreProvider from './ProductsStoreProvider';
 import Cardlist from 'components/Cardlist';
 import Overview from 'components/Overview';

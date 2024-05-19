@@ -1,3 +1,5 @@
+import React from 'react';
+
 const ArrowRightIconSVG: React.FC = () => {
   return (
     <svg viewBox="0 0 31 31" >
