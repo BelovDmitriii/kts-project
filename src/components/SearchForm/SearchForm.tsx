@@ -1,13 +1,13 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { ProductsStoreContext } from 'pages/MainPage/ProductsStoreProvider';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import styles from './SearchForm.module.scss';
+import { useProductsStore } from 'store/ProductsStore';
 
 const SearchForm: React.FC = () => {
 
-  const productsStore = React.useContext(ProductsStoreContext);
+  const productsStore = useProductsStore();
 
   return (
     <section className={styles.search_form}>

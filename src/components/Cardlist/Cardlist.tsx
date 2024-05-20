@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { ProductsStoreContext } from '../../pages/MainPage/ProductsStoreProvider';
+// import { ProductsStoreContext } from '../../pages/MainPage/ProductsStoreProvider';
 import Card from 'components/Card';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
@@ -10,24 +10,29 @@ import NotFoundPage from 'pages/NotFoundPage';
 import { ProductType } from 'types/types';
 import priceFormatter from 'utils/priceFormatter';
 import styles from './Cardlist.module.scss';
+import { useProductsStore } from 'store/ProductsStore';
 
 type CardlistProps = {
   title: string;
   amount?: number;
 }
 
-const Cardlist: React.FC<CardlistProps> = ({title}) => {
+const Cardlist: React.FC<CardlistProps> = ({title, amount}) => {
 
-  const productsStore = useContext(ProductsStoreContext);
+  const productsStore = useProductsStore();
 
   React.useEffect(() => {
     productsStore?.fetchProducts && productsStore.fetchProducts();
     productsStore?.fetchTotalProducts && productsStore.fetchTotalProducts();
-  },[productsStore]);
+  },[productsStore, productsStore.paginationStore.currentPage]);
 
   if (!productsStore) return null;
 
-  const productsList = productsStore.getProducts();
+  let productsList = productsStore.products;
+
+  if(amount){
+    productsList = productsStore.getProducts(amount);
+  }
 
   if(!productsList) {
     return <NotFoundPage type="page" />
@@ -39,6 +44,9 @@ const Cardlist: React.FC<CardlistProps> = ({title}) => {
       <div className={styles.loader_container}>
         <Loader size="l" fill="accent" />
       </div>
+      }
+      {productsStore.meta.isSuccess && productsList.length === 0 &&
+        <NotFoundPage type="product"/>
       }
       <CardlistTitle count={productsStore.totalProducts} textContent={title} />
       <section className={styles.cardlist__items}>

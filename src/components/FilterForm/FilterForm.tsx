@@ -1,11 +1,11 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { ProductsStoreContext } from 'pages/MainPage/ProductsStoreProvider';
 import MultiDropdown, { Option } from 'components/MultiDropdown';
 import styles from './FilterForm.module.scss';
+import { useProductsStore } from 'store/ProductsStore';
 
 const FilterForm = () => {
-  const productsStore = React.useContext(ProductsStoreContext);
+  const productsStore = useProductsStore();
 
   const handleChange = (selectedOptions: Option[]) => {
     productsStore.filterCategory.setSelectedCategory(selectedOptions?.[0]?.key || null);

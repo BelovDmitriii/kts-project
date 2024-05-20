@@ -10,7 +10,7 @@ type PrivateFields = "_product";
 export default class SingleProductStore implements ILocalStore {
 
   private _product: ProductType | null = null;
-  private _metaStore: MetaStore = new MetaStore();
+  readonly meta: MetaStore;
 
   constructor() {
     makeObservable<SingleProductStore, PrivateFields>(this, {
@@ -18,27 +18,25 @@ export default class SingleProductStore implements ILocalStore {
       product: computed,
       fetchProduct: action,
     });
+
+    this.meta = new MetaStore();
   }
 
   get product(): ProductType | null {
     return this._product;
   }
 
-  get meta(): MetaStore {
-    return this._metaStore;
-  }
-
   async fetchProduct(productId: string) {
-    this._metaStore.setLoading();
+    this.meta.setLoading();
     try {
       const response = await axios.get(ENDPOINTS.oneProduct(productId));
       runInAction(() => {
-        this._metaStore.setSuccess();
+        this.meta.setSuccess();
         this._product = response.data;
       });
     } catch (error) {
       runInAction(() => {
-        this._metaStore.setError();
+        this.meta.setError();
         this._product = null;
       });
     }

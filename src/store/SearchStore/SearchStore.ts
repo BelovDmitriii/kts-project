@@ -6,14 +6,14 @@ type PrivateFields = '_searchText';
 export default class SearchStore implements ILocalStore {
   private _searchText: string;
 
-  constructor(searchText: string | null) {
+  constructor(searchText: string = '') {
     makeObservable<SearchStore, PrivateFields>(this, {
       _searchText: observable,
       searchText: computed,
       setSearchText: action
     });
 
-    this._searchText = searchText || '';
+    this._searchText = searchText;
   }
 
   setSearchText(text: string){

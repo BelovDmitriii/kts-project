@@ -3,19 +3,16 @@ import { ILocalStore } from 'utils/useLocalStore';
 
 export default class PaginationStore implements ILocalStore {
   currentPage = 1;
-  productsCount = 9;
+  itemsPerPage = 9;
 
-  constructor(productsCount = 9, currentPage = 1) {
+  constructor() {
     makeObservable(this, {
       currentPage: observable,
-      productsCount: observable,
+      itemsPerPage: observable,
       setPrevCurrentPage: action,
       setCurrentPage: action,
       setNextCurrentPage: action,
     });
-
-    this.currentPage = currentPage || 1;
-    this.productsCount = productsCount;
   }
 
   setPrevCurrentPage = () => {
@@ -27,10 +24,14 @@ export default class PaginationStore implements ILocalStore {
   }
 
   setNextCurrentPage = () => {
-    this.currentPage = Math.min(this.currentPage + 1, this.productsCount);
+    this.currentPage = Math.min(this.currentPage + 1, this.itemsPerPage);
+  }
+
+  setItemsPerPage = (count: number) => {
+    this.itemsPerPage = count;
   }
 
   destroy(): void {
-      //sss
+      //
   }
 }

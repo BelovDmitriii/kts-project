@@ -4,7 +4,7 @@ import styles from './NotFoundPage.module.scss';
 
 const variants = {
   page: {text: 'Page Not Found', o: '😵'},
-  product: {text: 'We have no products with that ID', o: '🥺'}
+  product: {text: 'We don\'t have such products', o: '🥺'}
 };
 
 type NotFoundPageProps = {

@@ -9,7 +9,7 @@ import ReturnButton from 'components/ReturnButton';
 import Loader from 'components/Loader';
 import NotFoundPage from 'pages/NotFoundPage';
 import priceFormatter from 'utils/priceFormatter';
-import ProductsStoreProvider from '../MainPage/ProductsStoreProvider';
+import ProductsStore, {ProductsStoreProvider} from 'store/ProductsStore';
 import styles from './ProductPage.module.scss';
 
 const ProductPage = () => {
@@ -17,6 +17,7 @@ const ProductPage = () => {
   const { id } = useParams<{ id?: string }>();
   const singleProductStore = useLocalStore(() => new SingleProductStore());
   const product = singleProductStore.product;
+  const productsStore = new ProductsStore();
 
   React.useEffect(() => {
     if (id) {
@@ -47,8 +48,8 @@ const ProductPage = () => {
         contentSlot={priceFormatter(product.price)}
         title={product.title}
         subtitle={product.description}/>
-      <ProductsStoreProvider limit={3}>
-        <Cardlist title="Related Items"/>
+      <ProductsStoreProvider store={productsStore}>
+        <Cardlist title="Related Items" amount={3}/>
       </ProductsStoreProvider>
     </section>
   )

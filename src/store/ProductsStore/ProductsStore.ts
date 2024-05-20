@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IReactionDisposer, action, computed, makeObservable, observable, reaction, runInAction } from 'mobx';
 import debounce from 'lodash/debounce';
 import { ILocalStore } from 'utils/useLocalStore';
 import SearchStore from 'store/SearchStore';
@@ -6,33 +7,34 @@ import FilterStore from 'store/FilterStore';
 import PaginationStore from 'store/PaginationStore';
 import MetaStore from 'store/MetaStore';
 import { ENDPOINTS } from 'config/endpoints';
-import { action, computed, makeObservable, observable, reaction, runInAction } from 'mobx';
 import { ProductType } from 'types/types';
 import { updateURLQueryParam } from 'utils/helper';
 
+// const ITEMS_PER_PAGE = 9;
+// const currentPage = this.paginationStore.currentPage;
+
+// const currentProducts = this.products.slice(
+//   (currentPage - 1) * ITEMS_PER_PAGE,
+//   currentPage * ITEMS_PER_PAGE
+// );
 type PrivateFields = "_products" | "_totalProductsCount";
+export type ParamsType = {
+  title?: string;
+  categoryId?: string;
+  page?: number;
+};
 
 export default class ProductsStore implements ILocalStore {
-
   private _products: ProductType[] = [];
   private _totalProductsCount: number = 0;
-  private _metaStore: MetaStore = new MetaStore();
-  private _searchStore: SearchStore;
-  private _filterStore: FilterStore;
-  private _paginationStore: PaginationStore;
-  private _filterReactionDisposer;
+  private _filterReactionDisposer?: IReactionDisposer;
 
-  constructor({
-                title,
-                categoryId,
-                limit,
-                page,
-  }: {
-    title?: string,
-    categoryId?: string,
-    limit?: number,
-    page?: number,
-  }) {
+  readonly search: SearchStore;
+  readonly meta: MetaStore;
+  readonly paginationStore: PaginationStore;
+  readonly filterCategory: FilterStore;
+
+  constructor() {
     makeObservable<ProductsStore, PrivateFields>(this, {
       _products: observable.ref,
       _totalProductsCount: observable,
@@ -41,19 +43,24 @@ export default class ProductsStore implements ILocalStore {
       fetchProducts: action,
     });
 
-    this._searchStore = new SearchStore(title || null);
-    this._filterStore = new FilterStore(categoryId || null);
-    this._paginationStore = new PaginationStore(limit, page);
+    this.search = new SearchStore('');
+    this.filterCategory = new FilterStore(null);
+    this.paginationStore = new PaginationStore();
+    this.meta = new MetaStore();
+  }
 
+  init({title, categoryId, page}: ParamsType) {
+    this.search.setSearchText(title || '');
+    this.filterCategory.setSelectedCategory(categoryId || null);
+    this.paginationStore.setCurrentPage(page || 1);
 
     this._filterReactionDisposer = reaction(
       () => ({
-          search: this._searchStore.searchText,
-          filter: this._filterStore.selectedCategoryKey,
-          page: this._paginationStore.currentPage,
-        }),
+        search: this.search.searchText,
+        filter: this.filterCategory.selectedCategoryKey,
+        page: this.paginationStore.currentPage,
+      }),
       debounce(({ search, filter, page }) => {
-
         updateURLQueryParam('title', search || null);
         updateURLQueryParam('categoryId', filter);
         updateURLQueryParam('page', page > 1 ? page : null);
@@ -65,80 +72,69 @@ export default class ProductsStore implements ILocalStore {
   }
 
   get products(): ProductType[] {
-    return this._products;
-  }
-
-  get paginationStore(): PaginationStore {
-    return this._paginationStore;
+    const { currentPage, itemsPerPage } = this.paginationStore;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return this._products.slice(startIndex, endIndex);
   }
 
   get totalProducts(): number {
     return this._totalProductsCount;
   }
 
-  get search(): SearchStore {
-    return this._searchStore;
-  }
-
-  get meta(): MetaStore {
-    return this._metaStore;
-  }
-
-  get filterCategory(): FilterStore {
-    return this._filterStore;
-  }
-
-  getProducts(): ProductType[] {
-    return this._products;
+  getProducts(amount: number): ProductType[] {
+    return this._products.slice(0, amount);
   }
 
   destroy(): void {
-    this._filterReactionDisposer();
-    this._searchStore.destroy();
+    if (this._filterReactionDisposer) {
+      this._filterReactionDisposer();
+    }
+    this.search.destroy();
   }
 
   async fetchProducts(): Promise<void> {
-    this._metaStore.setLoading();
+    this.meta.setLoading();
     this._products = [];
 
-    const title = this._searchStore.searchText || undefined;
-    const categoryId = this._filterStore.selectedCategoryKey || undefined;
-
-    const currentPage = this._paginationStore.currentPage;
-    const productsCount = this._paginationStore.productsCount;
-
-    const offset = (currentPage - 1) * productsCount;
-    const limit = productsCount;
+    const title = this.search.searchText || undefined;
+    const categoryId = this.filterCategory.selectedCategoryKey || undefined;
 
     const params = {
       title,
       categoryId,
-      offset,
-      limit,
     };
 
     try {
       const response = await axios.get(ENDPOINTS.products, { params });
       runInAction(() => {
-        this._metaStore.setSuccess();
+        this.meta.setSuccess();
         this._products = response.data;
-      })
+      });
     } catch (error) {
-      this._metaStore.setError();
+      this.meta.setError();
       this._products = [];
     }
   }
 
   async fetchTotalProducts() {
-    const title = this._searchStore.searchText || undefined;
-    const categoryId = this._filterStore.selectedCategoryKey || undefined;
+    const title = this.search.searchText || undefined;
+    const categoryId = this.filterCategory.selectedCategoryKey || undefined;
 
     const params = {
       title,
       categoryId,
     };
 
-    const response = await axios.get(ENDPOINTS.products, { params });
-    this._totalProductsCount = response.data.length;
+    try {
+      const response = await axios.get(ENDPOINTS.products, { params });
+      runInAction(() => {
+        this._totalProductsCount = response.data.length;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this._totalProductsCount = 0;
+      });
+    }
   }
 }
