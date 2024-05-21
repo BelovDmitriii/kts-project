@@ -14,7 +14,7 @@ const Root:React.FC = () => {
       <Routes>
         <Route path={ROUTES.root} element={<MainPage />} />
         <Route path={ROUTES.product} element={<ProductPage />}/>
-        <Route path="*" element={<NotFoundPage type="page" />}/>
+        <Route path={ROUTES.notFound} element={<NotFoundPage type="page" />}/>
       </Routes>
     </BrowserRouter>
   )

@@ -25,7 +25,8 @@
       "config": ["config/*"],
       "styles": ["styles/*"],
       "utils": ["utils/*"],
-      "types": ["types/*"]
+      "types": ["types/*"],
+      "store": ["store/*"]
     }
   },
   "include": ["src"],

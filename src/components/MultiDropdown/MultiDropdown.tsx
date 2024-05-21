@@ -1,8 +1,8 @@
 import React from 'react';
+import classNames from 'classnames';
 import Input from '../Input';
 import Text from '../Text';
 import ArrowDownIcon from '../icons/ArrowDownIcon';
-import classNames from 'classnames';
 import { Option, MultiDropdownProps } from './types';
 import styles from './MultiDropdown.module.scss';
 
@@ -61,7 +61,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({className, options, value,
     if (selectedKeysSet.has(option.key)) {
       onChange([...value].filter(({ key }) => key !== option.key));
     } else {
-      onChange([...value, option]);
+      onChange([option]);
     }
 
     ref.current?.focus();
@@ -78,7 +78,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({className, options, value,
         className="multi_dropdown_field"
         onClick={open}
         disabled={disabled}
-        placeholder="Filter"
+        placeholder="Filter Category"
         value={opened ? filter : isEmpty ? '' : title}
         onChange={setFilter}
         afterSlot={<ArrowDownIcon color={'secondary'} width={30} height={30} />}

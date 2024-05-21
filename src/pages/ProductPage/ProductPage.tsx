@@ -1,40 +1,31 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { observer } from 'mobx-react-lite';
+import { useLocalStore } from 'utils/useLocalStore';
+import SingleProductStore from 'store/SingleProductStore';
 import Cardlist from 'components/Cardlist';
 import CurrentCard from 'components/CurrentCard';
 import ReturnButton from 'components/ReturnButton';
-import { ProductType } from 'types/types';
-import { ENDPOINTS } from 'config/endpoints';
 import Loader from 'components/Loader';
-import NotFoundPage from '../NotFoundPage';
+import NotFoundPage from 'pages/NotFoundPage';
 import priceFormatter from 'utils/priceFormatter';
-import { ROUTES } from 'config/routes';
+import ProductsStore, {ProductsStoreProvider} from 'store/ProductsStore';
 import styles from './ProductPage.module.scss';
 
 const ProductPage = () => {
 
-  const [product, setProduct] = useState<ProductType | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const { id } = useParams<{ id?: string }>();
+  const singleProductStore = useLocalStore(() => new SingleProductStore());
+  const product = singleProductStore.product;
+  const productsStore = new ProductsStore();
 
-  const { id } = useParams();
+  React.useEffect(() => {
+    if (id) {
+      singleProductStore.fetchProduct(id);
+    }
+  }, [id, singleProductStore]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try{
-        const response = await axios.get(`${ENDPOINTS.products}/${id}`);
-        setProduct(response.data);
-      } catch (error){
-        console.error('Ошибка при загрузке: ', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [id]);
-
-  if(isLoading){
+  if (singleProductStore.meta.isLoading || !product) {
     return (
       <div className={styles.product_page__loader_container}>
         <Loader size="l" fill="accent" />
@@ -42,24 +33,26 @@ const ProductPage = () => {
     );
   }
 
-  if (!product) {
-    return <NotFoundPage type={'page'} />;
+  if (singleProductStore.meta.isError || !product) {
+    return <NotFoundPage type={'product'} />;
   }
 
   return(
     <section className={styles.product_page__wrapper}>
-      <Link to={ROUTES.root} className={styles.product_page__link}>
+      <Link to="/" className={styles.product_page__link}>
         <ReturnButton />
       </Link>
       <CurrentCard
         className="currentcard_wrapper"
-        image={product.images[0]}
+        images={product.images}
         contentSlot={priceFormatter(product.price)}
         title={product.title}
         subtitle={product.description}/>
-      <Cardlist amount={3} title="Related Items"/>
+      <ProductsStoreProvider store={productsStore}>
+        <Cardlist title="Related Items" amount={3}/>
+      </ProductsStoreProvider>
     </section>
   )
 }
 
-export default ProductPage;
+export default observer(ProductPage);

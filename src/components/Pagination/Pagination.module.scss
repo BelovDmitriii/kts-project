@@ -1,6 +1,6 @@
 @import 'styles/variables';
 
-.pagination_container {
+.pagination__container {
   display: flex;
   align-items:center;
   justify-content: space-between;
@@ -9,21 +9,38 @@
   text-align: center;
   background-color: none;
   margin: $space-xxxl auto 0;
+  list-style-type: none;
 }
 
-.page-numbers{
+.page_numbers{
   display: flex;
   &__item {
     padding: 10px;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
     color: $color-black;
     width: 38px;
     height: 42px;
   }
   &__item:hover {
-    background-color: $color-accent;
+    background-color: $color-light-grey;
     color: $color-white;
     cursor: pointer;
+  }
+}
+
+.active_page {
+  background-color: $color-accent;
+  color: $color-white;
+
+  &:hover {
+    cursor: default;
+    background-color: $color-accent;
+  }
+}
+
+.arrow_icon{
+  &:hover {
+    color: $color-light-grey;
   }
 }

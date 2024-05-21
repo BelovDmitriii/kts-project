@@ -1,17 +1,24 @@
-import Button from '../Button';
-import Input from '../Input';
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import Button from 'components/Button';
+import Input from 'components/Input';
 import styles from './SearchForm.module.scss';
+import { useProductsStore } from 'store/ProductsStore';
 
-const SearchForm = () => {
+const SearchForm: React.FC = () => {
+
+  const productsStore = useProductsStore();
+
   return (
     <section className={styles.search_form}>
       <Input
         placeholder="Search product"
-        onChange={(value: string) => console.log(value)}
-        afterSlot={<Button>Find now</Button>}
+        value={productsStore.search.searchText}
+        onChange={(value: string) => productsStore.search.setSearchText(value)}
+        afterSlot={<Button loading={productsStore.meta.isLoading}>Find now</Button>}
       />
     </section>
   )
-}
+};
 
-export default SearchForm;
+export default observer(SearchForm);
